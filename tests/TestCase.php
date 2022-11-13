@@ -1,10 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace SGCompTech\FilamentTicketing\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use SGCompTech\FilamentTicketing\FilamentTicketingServiceProvider;
+use Filament\FilamentServiceProvider;
+use Livewire\LivewireServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -12,25 +14,34 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
+        // Factory::guessFactoryNamesUsing(
+            // fn (string $modelName) => 'SGCompTech\\FilamentTicketing\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        // );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            LivewireServiceProvider::class,
+            FilamentServiceProvider::class,
+            FilamentTicketingServiceProvider::class,
         ];
     }
 
     public function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
+        config()->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+        $migration = include __DIR__.'/../database/migrations/create_tickets_table.php';
         $migration->up();
-        */
+        $migration = include __DIR__.'/../database/migrations/create_comments_table.php';
+        $migration->up();
     }
 }
