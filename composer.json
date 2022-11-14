@@ -23,6 +23,7 @@
         "php": "^8.1",
         "filament/filament": "^2.16",
         "illuminate/contracts": "^9.0",
+        "laravel/framework": "^9.39",
         "spatie/laravel-package-tools": "^1.13.0",
         "spatie/laravel-permission": "^5.5"
     },
@@ -31,8 +32,9 @@
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^2.0.1",
         "orchestra/testbench": "^7.0",
-        "pestphp/pest": "^1.21",
+        "pestphp/pest": "^1.22",
         "pestphp/pest-plugin-laravel": "^1.1",
+        "pestphp/pest-plugin-livewire": "^1.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
@@ -40,8 +42,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SGCompTech\\FilamentTicketing\\": "src",
-            "SGCompTech\\FilamentTicketing\\Database\\Factories\\": "database/factories"
+            "SGCompTech\\FilamentTicketing\\": "src"
         }
     },
     "autoload-dev": {
@@ -50,6 +51,9 @@
         }
     },
     "scripts": {
+        "post-autoload-dump": [
+            "@php vendor/bin/testbench package:discover --ansi"
+        ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",

@@ -4,7 +4,6 @@ namespace SGCompTech\FilamentTicketing;
 
 use Spatie\LaravelPackageTools\Package;
 use Filament\PluginServiceProvider;
-use SGCompTech\FilamentTicketing\Commands\FilamentTicketingCommand;
 
 class FilamentTicketingServiceProvider extends PluginServiceProvider
 {
@@ -23,11 +22,11 @@ class FilamentTicketingServiceProvider extends PluginServiceProvider
          *
          * More info: https://github.com/spatie/laravel-package-tools
          */
-        parent::configurePackage($package);
         $package
             ->hasMigrations(['create_tickets_table', 'create_comments_table']);
             // ->hasRoute('web');
             // ->hasCommand(FilamentTicketingCommand::class);
+        parent::configurePackage($package);
     }
 
     protected function getResources(): array

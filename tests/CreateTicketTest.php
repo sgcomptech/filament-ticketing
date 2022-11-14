@@ -1,27 +1,28 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Tests;
-
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use SGCompTech\FilamentTicketing\Tests\User;
+use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource;
+use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource\Pages\CreateTicket;
+use function Pest\Livewire\livewire;
 
-uses(RefreshDatabase::class);
-
-// beforeEach(fn () => User::factory()->create());
+/*
+$user = null;
+beforeEach(function () {
+	global $user;
+	$user = User::factory()->create();
+});
+*/
 
 it('ticket requires title and content', function () {
-			/** @var mixed $author */
-			$author = User::factory()->create();
-
-			$this->actingAs($author)->post(route('posts.store'), [
-					'title' => '',
-					'body' => 'Some valid body',
-			])->assertSessionHasErrors('title');
-
-			$this->actingAs($author)->post(route('posts.store'), [
-					'title' => 'Some valid title',
-					'body' => '',
-			])->assertSessionHasErrors('body');
-
+	$user = User::factory()->create();
+	/** @var mixed $user */
+	$this->actingAs($user);
+	livewire(CreateTicket::class)
+		->fillForm([
+			'title' => '',
+			'content' => 'fake content',
+		])
+		->call('create')
+		->assertHasFormErrors();
 });
