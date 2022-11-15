@@ -18,10 +18,9 @@ You can install the package via composer:
 composer require sgcomptech/filament-ticketing
 ```
 
-You have to publish and run the migrations with:
+Run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="filament-ticketing-migrations"
 php artisan migrate
 ```
 

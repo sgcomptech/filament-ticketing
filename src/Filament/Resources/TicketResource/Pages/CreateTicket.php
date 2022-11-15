@@ -8,4 +8,16 @@ use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource;
 class CreateTicket extends CreateRecord
 {
     protected static string $resource = TicketResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+		if (config('filament-ticketing.user-model')) {
+            $user = auth()->user();
+            $data['user_id'] = $user->id;
+		} else {
+            $data['user_id'] = null;
+		}
+        $data['status'] = 0; // first state
+        return $data;
+    }
 }

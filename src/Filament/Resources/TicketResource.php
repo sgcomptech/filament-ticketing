@@ -52,9 +52,11 @@ class TicketResource extends Resource
 			->schema([
 				Card::make([
 					...$userSchema,
-					TextInput::make('title')->required()->maxLength(255),
-					Textarea::make('content')->required(),
-				]),
+					TextInput::make('title')->required()->maxLength(255)->columnSpan(2),
+					Textarea::make('content')->required()->columnSpan(2),
+					Select::make('priority')->options(config('filament-ticketing.priorities'))
+						->required(),
+				])->columns(2),
 			]);
 	}
 
