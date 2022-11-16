@@ -1,9 +1,9 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Models;
+namespace Sgcomptech\FilamentTicketing\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use SGCompTech\FilamentTicketing\Models\Ticket;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class Comment extends Model
 {

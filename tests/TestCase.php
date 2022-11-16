@@ -1,13 +1,13 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Tests;
+namespace Sgcomptech\FilamentTicketing\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use SGCompTech\FilamentTicketing\FilamentTicketingServiceProvider;
+use Sgcomptech\FilamentTicketing\FilamentTicketingServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
@@ -24,7 +24,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         // Factory::guessFactoryNamesUsing(
-        // fn (string $modelName) => 'SGCompTech\\FilamentTicketing\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        // fn (string $modelName) => 'Sgcomptech\\FilamentTicketing\\Database\\Factories\\'.class_basename($modelName).'Factory'
         // );
     }
 

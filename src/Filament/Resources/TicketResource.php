@@ -1,6 +1,6 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Filament\Resources;
+namespace Sgcomptech\FilamentTicketing\Filament\Resources;
 
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Placeholder;
@@ -15,7 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\MultiSelectFilter;
-use SGCompTech\FilamentTicketing\Models\Ticket;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class TicketResource extends Resource
 {

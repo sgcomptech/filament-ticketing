@@ -1,16 +1,16 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Facades;
+namespace Sgcomptech\FilamentTicketing\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \SGCompTech\FilamentTicketing\FilamentTicketing
+ * @see \Sgcomptech\FilamentTicketing\FilamentTicketing
  */
 class FilamentTicketing extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \SGCompTech\FilamentTicketing\FilamentTicketing::class;
+        return \Sgcomptech\FilamentTicketing\FilamentTicketing::class;
     }
 }

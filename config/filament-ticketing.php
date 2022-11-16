@@ -4,8 +4,8 @@ return [
 	'user-model' => \App\Models\User::class,
 
 	'resources' => [
-		SGCompTech\FilamentTicketing\Filament\Resources\TicketResource::class,
-		// SGCompTech\FilamentTicketing\Filament\Resources\CommentResource::class,
+		Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
+		// Sgcomptech\FilamentTicketing\Filament\Resources\CommentResource::class,
 	],
 
 	// filament navigation

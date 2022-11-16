@@ -1,6 +1,6 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Commands;
+namespace Sgcomptech\FilamentTicketing\Commands;
 
 use Illuminate\Console\Command;
 

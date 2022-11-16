@@ -1,9 +1,9 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
+namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
 use Filament\Resources\Pages\EditRecord;
-use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 use Filament\Pages\Actions\DeleteAction;
 
 class EditTicket extends EditRecord

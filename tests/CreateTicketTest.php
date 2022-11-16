@@ -2,25 +2,11 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
-use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource;
-use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource\Pages\CreateTicket;
-use SGCompTech\FilamentTicketing\Tests\User;
-use function Pest\Livewire\livewire;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\CreateTicket;
+use Sgcomptech\FilamentTicketing\Tests\Item;
+use Sgcomptech\FilamentTicketing\Tests\User;
 
-function tableDump(string $table = null)
-{
-	if ($table) {
-		echo "=== $table ===\n";
-		foreach (DB::select("select * from $table") as $item) {
-			echo json_encode($item) . "\n";
-		}
-	} else {
-		echo "=== tables ===\n";
-		foreach (DB::select("select name from sqlite_master") as $table) {
-			echo "$table->name\n";
-		}
-	}
-}
+use function Pest\Livewire\livewire;
 
 it('ticket requires title and content', function () {
 	$user = User::factory()->create();
@@ -123,5 +109,29 @@ it('not attached to any model', function () {
 		'title' => $title,
 		'ticketable_type' => null,
 		'ticketable_id' => null,
+	]);
+});
+
+it('attached to model', function () {
+	$user = User::factory()->create();
+	/** @var mixed $user */
+	$this->actingAs($user);
+	$itemA = Item::factory()->create();
+	$itemB = Item::factory()->create();
+
+	$title = 'fake title';
+	livewire(CreateTicket::class, ['rec' => $itemA->model_class(), 'recid' => $itemA->id])
+		->fillForm([
+			'title' => $title,
+			'content' => 'fake content',
+			'priority' => 0,
+		])
+		->call('create')
+		->assertHasNoFormErrors();
+
+	$this->assertDatabaseHas('tickets', [
+		'title' => $title,
+		'ticketable_type' => $itemA->model_class(),
+		'ticketable_id' => $itemA->id,
 	]);
 });

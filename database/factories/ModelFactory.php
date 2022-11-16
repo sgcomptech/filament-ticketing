@@ -1,6 +1,6 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Database\Factories;
+namespace Sgcomptech\FilamentTicketing\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

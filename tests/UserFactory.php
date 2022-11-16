@@ -1,6 +1,6 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Tests;
+namespace Sgcomptech\FilamentTicketing\Tests;
 
 use Orchestra\Testbench\Factories\UserFactory as TestbenchUserFactory;
 

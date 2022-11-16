@@ -1,6 +1,6 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Models;
+namespace Sgcomptech\FilamentTicketing\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

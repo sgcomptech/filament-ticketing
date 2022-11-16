@@ -1,8 +1,8 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Traits;
+namespace Sgcomptech\FilamentTicketing\Traits;
 
-use SGCompTech\FilamentTicketing\Models\Ticket;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 trait InteractsWithTickets
 {

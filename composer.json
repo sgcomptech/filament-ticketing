@@ -42,12 +42,12 @@
     },
     "autoload": {
         "psr-4": {
-            "SGCompTech\\FilamentTicketing\\": "src"
+            "Sgcomptech\\FilamentTicketing\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SGCompTech\\FilamentTicketing\\Tests\\": "tests"
+            "Sgcomptech\\FilamentTicketing\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -69,10 +69,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "SGCompTech\\FilamentTicketing\\FilamentTicketingServiceProvider"
+                "Sgcomptech\\FilamentTicketing\\FilamentTicketingServiceProvider"
             ],
             "aliases": {
-                "FilamentTicketing": "SGCompTech\\FilamentTicketing\\Facades\\FilamentTicketing"
+                "FilamentTicketing": "Sgcomptech\\FilamentTicketing\\Facades\\FilamentTicketing"
             }
         }
     },

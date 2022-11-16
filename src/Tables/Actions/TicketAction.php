@@ -1,9 +1,8 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Tables\Actions;
+namespace Sgcomptech\FilamentTicketing\Tables\Actions;
 
 use Filament\Tables\Actions\Action;
-use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource\Pages\ListTicket;
 
 class TicketAction extends Action
 {

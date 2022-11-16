@@ -1,13 +1,16 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
+namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
-use SGCompTech\FilamentTicketing\Filament\Resources\TicketResource;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 
 class CreateTicket extends CreateRecord
 {
+    public $rec, $recid;
+    protected $queryString = ['rec', 'recid'];
     protected static string $resource = TicketResource::class;
+    protected static bool $canCreateAnother = false;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
@@ -17,7 +20,23 @@ class CreateTicket extends CreateRecord
 		} else {
             $data['user_id'] = null;
 		}
+
+        if ($this->rec && $this->recid) {
+            $data['ticketable_type'] = $this->rec;
+            $data['ticketable_id'] = $this->recid;
+        }
+
         $data['status'] = 0; // first state
         return $data;
+    }
+
+    protected function getSubheading(): ?string
+    {
+        if ($this->rec) {
+            $recInstance = $this->rec::findOrFail($this->recid);
+            return $recInstance->{$recInstance->model_name()};
+        } else {
+            return null;
+        }
     }
 }

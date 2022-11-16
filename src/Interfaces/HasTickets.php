@@ -1,6 +1,6 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Interfaces;
+namespace Sgcomptech\FilamentTicketing\Interfaces;
 
 interface HasTickets
 {

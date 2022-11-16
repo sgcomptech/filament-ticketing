@@ -1,15 +1,20 @@
 <?php
 
-namespace SGCompTech\FilamentTicketing\Tests;
+namespace Sgcomptech\FilamentTicketing\Tests;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use SGCompTech\FilamentTicketing\Interfaces\HasTickets;
-use SGCompTech\FilamentTicketing\Traits\InteractsWithTickets;
+use Sgcomptech\FilamentTicketing\Interfaces\HasTickets;
+use Sgcomptech\FilamentTicketing\Traits\InteractsWithTickets;
 
 class Item extends Model implements HasTickets
 {
     use HasFactory, InteractsWithTickets;
 
     protected $guarded = [];
+
+    protected static function newFactory()
+    {
+        return ItemFactory::new();
+    }
 }

@@ -46,7 +46,6 @@ php artisan vendor:publish --tag="filament-ticketing-views"
 ## Usage
 
 ```php
-$filamentTicketing = new SGCompTech\FilamentTicketing();
 ```
 
 ## Testing
