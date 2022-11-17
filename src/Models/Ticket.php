@@ -29,4 +29,10 @@ class Ticket extends Model
 	{
 		return $this->belongsTo(config('filament-ticketing.user-model'));
 	}
+
+	public function priorityColor()
+	{
+		$colors = ['primary', 'success', 'warning', 'danger'];
+		return $colors[$this->priority] ?? 'danger';
+	}
 }

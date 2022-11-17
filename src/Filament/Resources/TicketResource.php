@@ -54,7 +54,10 @@ class TicketResource extends Resource
 					...$userSchema,
 					TextInput::make('title')->required()->maxLength(255)->columnSpan(2),
 					Textarea::make('content')->required()->columnSpan(2),
+					Select::make('status')->options(config('filament-ticketing.statuses'))
+						->hiddenOn('create'),
 					Select::make('priority')->options(config('filament-ticketing.priorities'))
+						->disabledOn('edit')
 						->required(),
 				])->columns(2),
 			]);
@@ -67,7 +70,9 @@ class TicketResource extends Resource
 				TextColumn::make('name')->sortable()->searchable(),
 				TextColumn::make('title')->searchable(),
 				SelectColumn::make('status')->options(config('filament-ticketing.statuses')),
-				SelectColumn::make('priority')->options(config('filament-ticketing.priorities')),
+				TextColumn::make('priority')
+					->formatStateUsing(fn ($record) => config("filament-ticketing.priorities.$record->priority"))
+					->color(fn ($record) => $record->priorityColor()),
 				TextColumn::make('assigned_to.name'),
 			])
 			->filters([

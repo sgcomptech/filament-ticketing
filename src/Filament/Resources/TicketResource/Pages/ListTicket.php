@@ -46,10 +46,18 @@ class ListTicket extends ListRecords
 
     protected function getTableQuery(): Builder
     {
+        if (config('filament-ticketing.use_permission')) {
+            $user = auth()->user();
+            /** @var mixed $user */
+            $builder = $user->can('manage all tickets') ? parent::getTableQuery()
+                : parent::getTableQuery()->where('assigned_to_id', $user->id);
+        } else {
+            $builder = parent::getTableQuery();
+        }
         return ($this->rec && $this->recid)
-            ? parent::getTableQuery()
+            ? $builder
                 ->where('ticketable_type', $this->rec)
                 ->where('ticketable_id', $this->recid)
-            : parent::getTableQuery();
+            : $builder;
     }
 }

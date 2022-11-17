@@ -29,4 +29,7 @@ return [
 		2 => 'High',
 		3 => 'Critical',
 	],
+
+	// use Spatie permission
+	'use_permission' => true,
 ];
