@@ -35,26 +35,28 @@ class TicketResource extends Resource
 	public static function form(Form $form): Form
 	{
 		$userModel = config('filament-ticketing.user-model');
+		$user = auth()->user();
 		$userSchema = [];
 		if ($userModel) {
-			$user = auth()->user();
 			$userSchema = [
 				Placeholder::make('Name')->content($user->name),
 				Placeholder::make('Email')->content($user->email),
 			];
 		} else {
 			$userSchema = [
-				TextInput::make('name')->required()->maxLength(255),
-				TextInput::make('email')->email()->required()->maxLength(255),
+				TextInput::make('name')->required()->maxLength(255)->disabledOn('edit'),
+				TextInput::make('email')->email()->required()->maxLength(255)->disabledOn('edit'),
 			];
 		}
 		return $form
 			->schema([
 				Card::make([
 					...$userSchema,
-					TextInput::make('title')->required()->maxLength(255)->columnSpan(2),
-					Textarea::make('content')->required()->columnSpan(2),
+					TextInput::make('title')->required()->maxLength(255)->columnSpan(2)->disabledOn('edit'),
+					Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
 					Select::make('status')->options(config('filament-ticketing.statuses'))
+						->disabled(fn ($record) => ($user->can('manageAllTickets', Ticket::class) ||
+							($user->can('manageAssignedTickets', Ticket::class) && $record?->assigned_to_id == $user->id)))
 						->hiddenOn('create'),
 					Select::make('priority')->options(config('filament-ticketing.priorities'))
 						->disabledOn('edit')
@@ -65,11 +67,16 @@ class TicketResource extends Resource
 
 	public static function table(Table $table): Table
 	{
+		$user = auth()->user();
+		/** @var mixed $user */
+		$canManageAllTickets = $user->can('manageAllTickets', Ticket::class);
+		$canManageAssignedTickets = $user->can('manageAssignedTickets', Ticket::class);
 		return $table
 			->columns([
-				TextColumn::make('name')->sortable()->searchable(),
+				TextColumn::make(config('filament-ticketing.user-model') ? 'user.name' : 'name')->sortable()->searchable(),
 				TextColumn::make('title')->searchable(),
-				SelectColumn::make('status')->options(config('filament-ticketing.statuses')),
+				SelectColumn::make('status')->options(config('filament-ticketing.statuses'))
+					->disabled(fn ($record) => ($canManageAllTickets || ($canManageAssignedTickets && $record->assigned_to_id == $user->id))),
 				TextColumn::make('priority')
 					->formatStateUsing(fn ($record) => config("filament-ticketing.priorities.$record->priority"))
 					->color(fn ($record) => $record->priorityColor()),
@@ -79,7 +86,7 @@ class TicketResource extends Resource
 				//
 			])
 			->actions([
-				EditAction::make(),
+				EditAction::make()->label('Change Status'),
 			// ])
 			// ->bulkActions([
 				// DeleteBulkAction::make(),

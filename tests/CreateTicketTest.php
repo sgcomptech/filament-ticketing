@@ -93,6 +93,9 @@ it('not using User model', function () {
 
 it('not attached to any model', function () {
 	config(['filament-ticketing.user-model' => null]);
+	$user = User::factory()->create();
+	/** @var mixed $user */
+	$this->actingAs($user);
 	$title = 'fake title';
 	livewire(CreateTicket::class)
 		->fillForm([

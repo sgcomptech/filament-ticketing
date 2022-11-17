@@ -10,6 +10,7 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class ListTicket extends ListRecords
 {
@@ -46,11 +47,17 @@ class ListTicket extends ListRecords
 
     protected function getTableQuery(): Builder
     {
-        if (config('filament-ticketing.use_permission')) {
+        if (config('filament-ticketing.use_authorization')) {
             $user = auth()->user();
             /** @var mixed $user */
-            $builder = $user->can('manage all tickets') ? parent::getTableQuery()
-                : parent::getTableQuery()->where('assigned_to_id', $user->id);
+
+            if ($user->can('manageAllTickets', Ticket::class)) {
+                $builder = parent::getTableQuery();
+            } else if ($user->can('manageAssignedTickets', Ticket::class)) {
+                $builder = parent::getTableQuery()->where('assigned_to_id', $user->id);
+            } else {
+                $builder = parent::getTableQuery()->where('user_id', $user->id);
+            }
         } else {
             $builder = parent::getTableQuery();
         }
