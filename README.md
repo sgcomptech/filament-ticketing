@@ -45,7 +45,7 @@ php artisan vendor:publish --tag="filament-ticketing-views"
 
 ## Usage
 
-This package has to option to use Spatie Permission to authorise various actions on the tickets.
+This package has to option to use Laravel policies to authorise various actions performed on the tickets.
 ```php
 ```
 

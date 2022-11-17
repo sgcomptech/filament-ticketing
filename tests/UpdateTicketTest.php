@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
-use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\ListTicket;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\EditTicket;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
 use Sgcomptech\FilamentTicketing\Tests\User;
 
 use function Pest\Livewire\livewire;
 
-it('List tickets with authorization', function () {
+it('Update tickets with authorization', function () {
 	config(['filament-ticketing.use_authorization' => true]);
 	$superUser = User::factory()->create(['id' => 1]);
 	$admin = User::factory()->create(['name' => 'Administrator']);
@@ -27,36 +28,6 @@ it('List tickets with authorization', function () {
 
 	$this->actingAs($admin);
 
-	/// List all
-	livewire(ListTicket::class)
-		->assertSee(['Ticket 1', 'Ticket 2', 'Ticket 3', 'Ticket 4']);
-
-	$this->actingAs($manager);
-
-	livewire(ListTicket::class)
-		->assertSee(['Ticket 1', 'Ticket 2', 'Ticket 3', 'Ticket 4']);
-	
-	$this->actingAs($supportA);
-
-	livewire(ListTicket::class)
-		->assertSee('Ticket 3')
-		->assertDontSee(['Ticket 1', 'Ticket 2', 'Ticket 4']);
-
-	$this->actingAs($supportB);
-
-	livewire(ListTicket::class)
-		->assertSee('Ticket 4')
-		->assertDontSee(['Ticket 1', 'Ticket 2', 'Ticket 3']);
-	
-	$this->actingAs($userA);
-
-	livewire(ListTicket::class)
-		->assertSee(['Ticket 1', 'Ticket 2'])
-		->assertDontSee(['Ticket 3', 'Ticket 4']);
-
-	$this->actingAs($userB);
-
-	livewire(ListTicket::class)
-		->assertSee(['Ticket 3', 'Ticket 4'])
-		->assertDontSee(['Ticket 1', 'Ticket 2']);
+	livewire(EditTicket::class, ['record' => 1])
+		->assertFormFieldIsEnabled('status');
 });

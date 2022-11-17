@@ -30,6 +30,6 @@ return [
 		3 => 'Critical',
 	],
 
-	// use Spatie permission
-	'use_permission' => true,
+	// use authorization
+	'use_authorization' => false,
 ];
