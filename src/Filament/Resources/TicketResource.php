@@ -11,6 +11,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\Filter;
@@ -55,8 +56,9 @@ class TicketResource extends Resource
 					TextInput::make('title')->required()->maxLength(255)->columnSpan(2)->disabledOn('edit'),
 					Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
 					Select::make('status')->options(config('filament-ticketing.statuses'))
-						->disabled(fn ($record) => ($user->can('manageAllTickets', Ticket::class) ||
-							($user->can('manageAssignedTickets', Ticket::class) && $record?->assigned_to_id == $user->id)))
+						->required()
+						->disabled(fn ($record) => ($user->cannot('manageAllTickets', Ticket::class) &&
+							($user->cannot('manageAssignedTickets', Ticket::class) || $record?->assigned_to_id != $user->id)))
 						->hiddenOn('create'),
 					Select::make('priority')->options(config('filament-ticketing.priorities'))
 						->disabledOn('edit')
@@ -75,8 +77,8 @@ class TicketResource extends Resource
 			->columns([
 				TextColumn::make(config('filament-ticketing.user-model') ? 'user.name' : 'name')->sortable()->searchable(),
 				TextColumn::make('title')->searchable(),
-				SelectColumn::make('status')->options(config('filament-ticketing.statuses'))
-					->disabled(fn ($record) => ($canManageAllTickets || ($canManageAssignedTickets && $record->assigned_to_id == $user->id))),
+				TextColumn::make('status')
+					->formatStateUsing(fn ($record) => config("filament-ticketing.statuses.$record->status")),
 				TextColumn::make('priority')
 					->formatStateUsing(fn ($record) => config("filament-ticketing.priorities.$record->priority"))
 					->color(fn ($record) => $record->priorityColor()),
@@ -86,6 +88,7 @@ class TicketResource extends Resource
 				//
 			])
 			->actions([
+				ViewAction::make(),
 				EditAction::make()->label('Change Status'),
 			// ])
 			// ->bulkActions([
