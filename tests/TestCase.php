@@ -17,11 +17,13 @@ use Livewire\LivewireServiceProvider;
 use Sgcomptech\FilamentTicketing\FilamentTicketingServiceProvider;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 use Sgcomptech\FilamentTicketing\Tests\Policies\TicketPolicy;
+use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
+use Filament\SpatieLaravelSettingsPluginServiceProvider;
+use Filament\SpatieLaravelTranslatablePluginServiceProvider;
 
 class TestCase extends Orchestra
 {
-    use  RefreshDatabase;
-    protected $policies = [];
+    // use  RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -36,20 +38,23 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            LivewireServiceProvider::class,
-            FilamentServiceProvider::class,
-            FormsServiceProvider::class,
-            FilamentTicketingServiceProvider::class,
-            NotificationsServiceProvider::class,
-            SupportServiceProvider::class,
-            TablesServiceProvider::class,
+            BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
             BladeIconsServiceProvider::class,
+            FilamentServiceProvider::class,
+            FormsServiceProvider::class,
+            LivewireServiceProvider::class,
+            NotificationsServiceProvider::class,
+            SpatieLaravelSettingsPluginServiceProvider::class,
+            SpatieLaravelTranslatablePluginServiceProvider::class,
+            SupportServiceProvider::class,
+            TablesServiceProvider::class,
+            FilamentTicketingServiceProvider::class,
         ];
     }
 
-    // public function getEnvironmentSetUp($app)
-    public function defineEnvironment($app)
+    // public function defineEnvironment($app)
+    public function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
@@ -57,6 +62,11 @@ class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+
+        $migration = include __DIR__.'/../database/migrations/create_tickets_table.php';
+        $migration->up();
+        $migration = include __DIR__.'/../database/migrations/create_comments_table.php';
+        $migration->up();
     }
 
     /**
