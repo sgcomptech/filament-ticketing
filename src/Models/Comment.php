@@ -7,8 +7,7 @@ use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class Comment extends Model
 {
-	protected $fillable = ['name', 'email',
-		'title', 'content'];
+	protected $guarded = [];
 
 	public function ticket()
 	{

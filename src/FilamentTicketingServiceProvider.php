@@ -10,8 +10,6 @@ use Filament\PluginServiceProvider;
 class FilamentTicketingServiceProvider extends PluginServiceProvider
 {
     public static string $name = 'filament-ticketing';
-    // use Vendor\Package\Resources\CustomResource;
-    // protected array $resources = [ CustomResource::class, ];
     // use Vendor\Package\Widgers\CustomWidget;
     // protected array $widgets = [ CustomWidget::class, ];
     // protected array $pages = [ CreateTicket::class, ];

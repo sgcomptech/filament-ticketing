@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\MultiSelectFilter;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\RelationManagers\CommentsRelationManager;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class TicketResource extends Resource
@@ -76,7 +77,7 @@ class TicketResource extends Resource
 			])
 			->actions([
 				ViewAction::make(),
-				EditAction::make()->label('Change Status')
+				EditAction::make()
 					->visible($canManageAllTickets || $canManageAssignedTickets),
 			// ])
 			// ->bulkActions([
@@ -86,7 +87,9 @@ class TicketResource extends Resource
 
 	public static function getRelations(): array
 	{
-		return [];
+		return [
+			CommentsRelationManager::class,
+		];
 	}
 
 	public static function getPages(): array

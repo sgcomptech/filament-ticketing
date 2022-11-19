@@ -10,9 +10,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('email')->nullable();
-            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('user_id');
             $table->foreignId('ticket_id');
             $table->text('content');
             $table->timestamps();
