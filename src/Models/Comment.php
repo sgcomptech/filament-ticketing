@@ -8,7 +8,7 @@ use Sgcomptech\FilamentTicketing\Models\Ticket;
 class Comment extends Model
 {
 	protected $fillable = ['name', 'email',
-		'assigned_to', 'status', 'priority', 'title', 'content'];
+		'title', 'content'];
 
 	public function ticket()
 	{
@@ -17,7 +17,6 @@ class Comment extends Model
 
 	public function user()
 	{
-		$userModel = config('filament-ticketing.user-model');
-		return $userModel ? $this->belongsTo(config('filament-ticketing.user-model')) : null;
+		return $this->belongsTo(config('filament-ticketing.user-model'));
 	}
 }

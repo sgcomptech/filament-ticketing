@@ -4,6 +4,7 @@ namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
+use Illuminate\Support\Str;
 
 class CreateTicket extends CreateRecord
 {
@@ -14,18 +15,13 @@ class CreateTicket extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-		if (config('filament-ticketing.user-model')) {
-            $user = auth()->user();
-            $data['user_id'] = $user->id;
-		} else {
-            $data['user_id'] = null;
-		}
-
         if ($this->rec && $this->recid) {
             $data['ticketable_type'] = $this->rec;
             $data['ticketable_id'] = $this->recid;
         }
 
+        $data['user_id'] = auth()->id();
+        $data['identifier'] = strtoupper(Str::random(8));
         $data['status'] = 0; // first state
         return $data;
     }

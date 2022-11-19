@@ -10,11 +10,9 @@ use function Pest\Livewire\livewire;
 
 it('ticket requires title and content', function () {
 	$user = User::factory()->create();
-	/** @var mixed $user */
 	$this->actingAs($user);
 	$title = 'Test title';
 	livewire(CreateTicket::class)
-		->assertSee($user->name)
 		->fillForm([
 			'title' => '',
 			'content' => 'fake content',
@@ -42,18 +40,16 @@ it('ticket requires title and content', function () {
 		->assertHasNoFormErrors();
 
 	$this->assertDatabaseHas('tickets', [
-		'name' => null,
-		'email' => null,
 		'title' => $title,
 		'ticketable_type' => null,
 		'ticketable_id' => null,
+		'user_id' => $user->id,
 	]);
 });
-
+/*
 it('not using User model', function () {
 	config(['filament-ticketing.user-model' => null]);
 	$user = User::factory()->create();
-	/** @var mixed $user */
 	$this->actingAs($user);
 	livewire(CreateTicket::class)
 		->assertDontSee($user->name)
@@ -90,17 +86,13 @@ it('not using User model', function () {
 		'ticketable_id' => null,
 	]);
 });
-
+*/
 it('not attached to any model', function () {
-	config(['filament-ticketing.user-model' => null]);
 	$user = User::factory()->create();
-	/** @var mixed $user */
 	$this->actingAs($user);
 	$title = 'fake title';
 	livewire(CreateTicket::class)
 		->fillForm([
-			'name' => 'fake name',
-			'email' => 'fake@email',
 			'title' => $title,
 			'content' => 'fake content',
 			'priority' => 0,
@@ -117,7 +109,6 @@ it('not attached to any model', function () {
 
 it('attached to model', function () {
 	$user = User::factory()->create();
-	/** @var mixed $user */
 	$this->actingAs($user);
 	$itemA = Item::factory()->create();
 	$itemB = Item::factory()->create();

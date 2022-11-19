@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-	protected $fillable = ['ticketable_type', 'ticketable_id', 'name', 'email',
-		'assigned_to', 'status', 'priority', 'title', 'content'];
+	protected $guarded = [];
 
 	public function ticketable()
 	{
@@ -16,8 +15,7 @@ class Ticket extends Model
 
 	public function user()
 	{
-		$userModel = config('filament-ticketing.user-model');
-		return $userModel ? $this->belongsTo(config('filament-ticketing.user-model')) : null;
+		return $this->belongsTo(config('filament-ticketing.user-model'));
 	}
 
 	public function comments()

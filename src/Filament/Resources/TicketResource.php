@@ -35,24 +35,10 @@ class TicketResource extends Resource
 
 	public static function form(Form $form): Form
 	{
-		$userModel = config('filament-ticketing.user-model');
 		$user = auth()->user();
-		$userSchema = [];
-		if ($userModel) {
-			$userSchema = [
-				Placeholder::make('Name')->content($user->name),
-				Placeholder::make('Email')->content($user->email),
-			];
-		} else {
-			$userSchema = [
-				TextInput::make('name')->required()->maxLength(255)->disabledOn('edit'),
-				TextInput::make('email')->email()->required()->maxLength(255)->disabledOn('edit'),
-			];
-		}
 		return $form
 			->schema([
 				Card::make([
-					...$userSchema,
 					TextInput::make('title')->required()->maxLength(255)->columnSpan(2)->disabledOn('edit'),
 					Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
 					Select::make('status')->options(config('filament-ticketing.statuses'))
@@ -75,21 +61,23 @@ class TicketResource extends Resource
 		$canManageAssignedTickets = $user->can('manageAssignedTickets', Ticket::class);
 		return $table
 			->columns([
-				TextColumn::make(config('filament-ticketing.user-model') ? 'user.name' : 'name')->sortable()->searchable(),
-				TextColumn::make('title')->searchable(),
+				TextColumn::make('identifier')->searchable(),
+				TextColumn::make('user.name')->sortable()->searchable(),
+				TextColumn::make('title')->searchable()->words(8),
 				TextColumn::make('status')
 					->formatStateUsing(fn ($record) => config("filament-ticketing.statuses.$record->status")),
 				TextColumn::make('priority')
 					->formatStateUsing(fn ($record) => config("filament-ticketing.priorities.$record->priority"))
 					->color(fn ($record) => $record->priorityColor()),
-				TextColumn::make('assigned_to.name'),
+				TextColumn::make('assigned_to.name')->visible($canManageAllTickets || $canManageAssignedTickets),
 			])
 			->filters([
 				//
 			])
 			->actions([
 				ViewAction::make(),
-				EditAction::make()->label('Change Status'),
+				EditAction::make()->label('Change Status')
+					->visible($canManageAllTickets || $canManageAssignedTickets),
 			// ])
 			// ->bulkActions([
 				// DeleteBulkAction::make(),

@@ -1,6 +1,5 @@
 <?php
 return [
-	// set to 'null' if ticket should not be related to any user model
 	'user-model' => \App\Models\User::class,
 
 	'resources' => [

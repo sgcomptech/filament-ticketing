@@ -18,11 +18,11 @@ it('List tickets with authorization', function () {
 	$userB = User::factory()->create(['name' => 'User B']);
 
 	DB::insert("insert into tickets
-	 (id,   ticketable_type, ticketable_id, name, email,    user_id, assigned_to_id, status, priority,      title, content) values
-	  (1,              null,          null, null,  null, $userA->id,           null,      0,        0, 'Ticket 1', 'Content 1'),
-	  (2, 'App\Models\Item',             1, null,  null, $userA->id,   $manager->id,      0,        0, 'Ticket 2', 'Content 2'),
-	  (3, 'App\Models\Item',             1, null,  null, $userB->id,  $supportA->id,      3,        0, 'Ticket 3', 'Content 3'),
-	  (4, 'App\Models\Item',             2, null,  null, $userB->id,  $supportB->id,      2,        0, 'Ticket 4', 'Content 4');
+	 (id, identifier, ticketable_type, ticketable_id, user_id, assigned_to_id, status, priority,      title, content) values
+	  (1, '1',                   null,          null, $userA->id,           null,      0,        0, 'Ticket 1', 'Content 1'),
+	  (2, '2',      'App\Models\Item',             1, $userA->id,   $manager->id,      0,        0, 'Ticket 2', 'Content 2'),
+	  (3, '3',      'App\Models\Item',             1, $userB->id,  $supportA->id,      3,        0, 'Ticket 3', 'Content 3'),
+	  (4, '4',      'App\Models\Item',             2, $userB->id,  $supportB->id,      2,        0, 'Ticket 4', 'Content 4');
 	");
 
 	$this->actingAs($admin);
