@@ -76,11 +76,11 @@ class TicketResource extends Resource
 				//
 			])
 			->actions([
-				ViewAction::make(),
+				// ViewAction::make(),
 				EditAction::make()
 					->visible($canManageAllTickets || $canManageAssignedTickets),
-			// ])
-			// ->bulkActions([
+			])
+			->bulkActions([
 				// DeleteBulkAction::make(),
 			]);
 	}

@@ -30,35 +30,35 @@ class CommentsRelationManager extends RelationManager
 
     public static function table(Table $table): Table
     {
+        $userId = auth()->id();
+
         return $table
             ->columns([
                 Stack::make([
                     Split::make([
-                        TextColumn::make('user.name')->grow(false),
-                        TextColumn::make('created_at')->dateTime(),
+                        TextColumn::make('user.name')
+                            ->weight('bold')
+                            ->color(fn (LivewireComponent $livewire) =>
+                            $userId == $livewire->ownerRecord->user_id ? 'primary' : 'warning')
+                            ->grow(false),
+                        TextColumn::make('created_at')->dateTime()->color('secondary'),
                     ]),
                     TextColumn::make('content')->wrap(),
                 ]),
             ])
-            ->filters([])
             ->headerActions([
                 Action::make('Add Comment')
                     ->form([
                         Textarea::make('content')->required(),
                     ])
-                    ->action(function (array $data, LivewireComponent $livewire): void {
+                    ->action(function (array $data, LivewireComponent $livewire) use ($userId): void {
                         Comment::create([
                             'content' => $data['content'],
-                            'user_id' => auth()->id(),
+                            'user_id' => $userId,
                             'ticket_id' => $livewire->ownerRecord->id,
                         ]);
                     })
             ])
-            ->actions([
-                // Tables\Actions\DissociateAction::make(),
-            ])
-            ->bulkActions([
-                // Tables\Actions\DissociateBulkAction::make(),
-            ]);
+            ->defaultSort('id', 'desc');
     }
 }
