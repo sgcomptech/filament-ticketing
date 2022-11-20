@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\ListTicket;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\CreateTicket;
+use Sgcomptech\FilamentTicketing\Tests\Item;
 use Sgcomptech\FilamentTicketing\Tests\User;
 
 use function Pest\Livewire\livewire;
@@ -59,4 +61,88 @@ it('List tickets with authorization', function () {
 	livewire(ListTicket::class)
 		->assertSee(['Ticket 3', 'Ticket 4'])
 		->assertDontSee(['Ticket 1', 'Ticket 2']);
+});
+
+it('List correct tickets for associated model', function () {
+	config(['filament-ticketing.use_authorization' => true]);
+	$superUser = User::factory()->create(['id' => 1]);
+	$admin = User::factory()->create(['name' => 'Administrator']);
+	$manager = User::factory()->create(['name' => 'Manager']);
+	$support = User::factory()->create(['name' => 'Support A']);
+	$userA = User::factory()->create(['name' => 'User A']);
+	$userB = User::factory()->create(['name' => 'User B']);
+
+	$itemA = Item::factory()->create();
+	$itemB = Item::factory()->create();
+	$itemC = Item::factory()->create();
+
+	$this->actingAs($userA);
+
+	$title1 = 'fake title 1';
+	livewire(CreateTicket::class, [
+			'rec' => $itemA->model_class(),
+			'recid' => $itemA->id])
+		->fillForm([
+			'title' => $title1,
+			'content' => 'fake content',
+			'priority' => 0,
+		])
+		->call('create')
+		->assertHasNoFormErrors();
+
+	$title2 = 'fake title 2';
+	livewire(CreateTicket::class, [
+			'rec' => $itemB->model_class(),
+			'recid' => $itemB->id])
+		->fillForm([
+			'title' => $title2,
+			'content' => 'fake content',
+			'priority' => 0,
+		])
+		->call('create')
+		->assertHasNoFormErrors();
+
+	$this->actingAs($userB);
+
+	$title3 = 'fake title 3';
+	livewire(CreateTicket::class, [
+			'rec' => $itemC->model_class(),
+			'recid' => $itemC->id])
+		->fillForm([
+			'title' => $title3,
+			'content' => 'fake content',
+			'priority' => 0,
+		])
+		->call('create')
+		->assertHasNoFormErrors();
+
+	livewire(ListTicket::class)
+		->assertSee([$title3])
+		->assertDontSee([$title1, $title2, $itemA->name, $itemB->name, $itemC->name]);
+
+	livewire(ListTicket::class, ['rec' => $itemC->model_class(), 'recid' => $itemC->id])
+		->assertSee([$title3, $itemC->name])
+		->assertDontSee([$title1, $title2, $itemA->name, $itemB->name]);
+
+	livewire(ListTicket::class, ['rec' => $itemB->model_class(), 'recid' => $itemB->id])
+		->assertSee([$itemB->name])
+		->assertDontSee([$title1, $title2, $title3]);
+
+	$this->actingAs($userA);
+
+	livewire(ListTicket::class)
+		->assertSee([$title1, $title2])
+		->assertDontSee([$title3]);
+
+	livewire(ListTicket::class, ['rec' => $itemA->model_class(), 'recid' => $itemA->id])
+		->assertSee([$title1])
+		->assertDontSee([$title2, $title3]);
+
+	livewire(ListTicket::class, ['rec' => $itemB->model_class(), 'recid' => $itemB->id])
+		->assertSee([$title2])
+		->assertDontSee([$title1, $title3]);
+
+	livewire(ListTicket::class, ['rec' => $itemC->model_class(), 'recid' => $itemC->id])
+		->assertDontSee([$title1, $title2, $title3]);
+
 });

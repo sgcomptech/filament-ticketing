@@ -4,7 +4,6 @@ return [
 
 	'resources' => [
 		Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
-		Sgcomptech\FilamentTicketing\Filament\Resources\CommentResource::class,
 	],
 
 	// filament navigation

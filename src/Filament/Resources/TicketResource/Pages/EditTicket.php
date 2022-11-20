@@ -17,4 +17,9 @@ class EditTicket extends EditRecord
             DeleteAction::make(),
         ] : [];
     }
+
+    protected function getTitle(): string
+    {
+        return 'Ticket';
+    }
 }

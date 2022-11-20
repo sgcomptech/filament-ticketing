@@ -14,6 +14,7 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Livewire\Component as LivewireComponent;
 use Sgcomptech\FilamentTicketing\Models\Comment;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class CommentsRelationManager extends RelationManager
 {
@@ -30,7 +31,7 @@ class CommentsRelationManager extends RelationManager
 
     public static function table(Table $table): Table
     {
-        $userId = auth()->id();
+        $user = auth()->user();
 
         return $table
             ->columns([
@@ -39,7 +40,7 @@ class CommentsRelationManager extends RelationManager
                         TextColumn::make('user.name')
                             ->weight('bold')
                             ->color(fn (LivewireComponent $livewire) =>
-                            $userId == $livewire->ownerRecord->user_id ? 'primary' : 'warning')
+                                $livewire->ownerRecord->user_id == $user->id ? 'primary' : 'success')
                             ->grow(false),
                         TextColumn::make('created_at')->dateTime()->color('secondary'),
                     ]),
@@ -47,14 +48,20 @@ class CommentsRelationManager extends RelationManager
                 ]),
             ])
             ->headerActions([
-                Action::make('Add Comment')
+                Action::make('addComment')
+                    ->label('Add Comment')
                     ->form([
                         Textarea::make('content')->required(),
                     ])
-                    ->action(function (array $data, LivewireComponent $livewire) use ($userId): void {
+                    ->action(function (array $data, LivewireComponent $livewire) use ($user): void {
+                        $ticket = $livewire->ownerRecord;
+                        abort_unless(
+                            config('filament-ticketing.use_authorization') == false ||
+                            $ticket->user_id == $user->id || $ticket->assigned_to_id == $user->id ||
+                            $user->can('manageAllTickets', Ticket::class), 403);
                         Comment::create([
                             'content' => $data['content'],
-                            'user_id' => $userId,
+                            'user_id' => $user->id,
                             'ticket_id' => $livewire->ownerRecord->id,
                         ]);
                     })
