@@ -3,7 +3,6 @@
 namespace Sgcomptech\FilamentTicketing\Filament\Resources;
 
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -11,11 +10,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\SelectColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\MultiSelectFilter;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\RelationManagers\CommentsRelationManager;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 
@@ -37,6 +32,15 @@ class TicketResource extends Resource
 	public static function form(Form $form): Form
 	{
 		$user = auth()->user();
+		if (config('filament-ticketing.use_authorization')) {
+			$cannotManageAllTickets = $user->cannot('manageAllTickets', Ticket::class);
+			$cannotManageAssignedTickets = $user->cannot('manageAssignedTickets', Ticket::class);
+			$cannotAssignTickets = $user->cannot('assignTickets', Ticket::class);
+		} else {
+			$cannotManageAllTickets = false;
+			$cannotManageAssignedTickets = false;
+			$cannotAssignTickets = false;
+		}
 		return $form
 			->schema([
 				Card::make([
@@ -44,12 +48,28 @@ class TicketResource extends Resource
 					Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
 					Select::make('status')->options(config('filament-ticketing.statuses'))
 						->required()
-						->disabled(fn ($record) => ($user->cannot('manageAllTickets', Ticket::class) &&
-							($user->cannot('manageAssignedTickets', Ticket::class) || $record?->assigned_to_id != $user->id)))
+						->disabled(fn ($record) => (
+							$cannotManageAllTickets &&
+							($cannotManageAssignedTickets || $record?->assigned_to_id != $user->id)))
 						->hiddenOn('create'),
 					Select::make('priority')->options(config('filament-ticketing.priorities'))
 						->disabledOn('edit')
 						->required(),
+					Select::make('assigned_to_id')
+						->label('Assign Ticket To')
+						->hint('Key in 3 or more characters to begin search')
+						->searchable()
+						->getSearchResultsUsing(function ($search) {
+							if (strlen($search) < 3) return [];
+							return config('filament-ticketing.user-model')::where('name', 'like', "%{$search}%")
+								->limit(50)
+								->get()
+								->filter(fn ($user) => $user->can('manageAssignedTickets'))
+								->pluck('name', 'id');
+						})
+						->getOptionLabelUsing(fn ($value): ?string => config('filament-ticketing.user-model')::find($value)?->name)
+						->disabled($cannotAssignTickets)
+						->hiddenOn('create'),
 				])->columns(2),
 			]);
 	}
@@ -57,9 +77,13 @@ class TicketResource extends Resource
 	public static function table(Table $table): Table
 	{
 		$user = auth()->user();
-		/** @var mixed $user */
-		$canManageAllTickets = $user->can('manageAllTickets', Ticket::class);
-		$canManageAssignedTickets = $user->can('manageAssignedTickets', Ticket::class);
+		if (config('filament-ticketing.use_authorization')) {
+			$canManageAllTickets = $user->can('manageAllTickets', Ticket::class);
+			$canManageAssignedTickets = $user->can('manageAssignedTickets', Ticket::class);
+		} else {
+			$canManageAllTickets = true;
+			$canManageAssignedTickets = true;
+		}
 		return $table
 			->columns([
 				TextColumn::make('identifier')->searchable(),

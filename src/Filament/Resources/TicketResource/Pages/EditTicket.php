@@ -13,7 +13,9 @@ class EditTicket extends EditRecord
 
     protected function getActions(): array
     {
-        return auth()->user()->can('deleteTickets', Ticket::class) ? [
+        return
+        (!config('filament-ticketing.use_authorization') ||
+        auth()->user()->can('deleteTickets', Ticket::class)) ? [
             DeleteAction::make(),
         ] : [];
     }

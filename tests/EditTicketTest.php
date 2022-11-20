@@ -46,8 +46,10 @@ it('Update tickets with authorization', function () {
 	livewire(EditTicket::class, ['record' => 3])->assertFormFieldIsDisabled('status');
 
 	$this->actingAs($userA);
-	livewire(EditTicket::class, ['record' => 1])->assertForbidden();
+	livewire(EditTicket::class, ['record' => 1])->assertFormFieldIsDisabled('status');
+	livewire(EditTicket::class, ['record' => 2])->assertFormFieldIsDisabled('status');
 
 	$this->actingAs($userB);
-	livewire(EditTicket::class, ['record' => 3])->assertForbidden();
+	livewire(EditTicket::class, ['record' => 3])->assertFormFieldIsDisabled('status');
+	livewire(EditTicket::class, ['record' => 4])->assertFormFieldIsDisabled('status');
 });

@@ -53,9 +53,10 @@ class TicketPolicy
      */
     public function update(User $user, Ticket $ticket)
     {
-        return ($user->id == 1) || str_contains($user->name, 'Manager')
+        return true;
+        /* return ($user->id == 1) || str_contains($user->name, 'Manager')
             || str_contains($user->name, 'Administrator')
-            || str_contains($user->name, 'Support');
+            || str_contains($user->name, 'Support');*/
     }
 
     /**
