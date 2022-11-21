@@ -3,7 +3,6 @@
 namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
-use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 use Illuminate\Support\Str;
 use Sgcomptech\FilamentTicketing\Events\NewTicket;
 
@@ -11,8 +10,12 @@ class CreateTicket extends CreateRecord
 {
     public $rec, $recid;
     protected $queryString = ['rec', 'recid'];
-    protected static string $resource = TicketResource::class;
     protected static bool $canCreateAnother = false;
+
+    public static function getResource(): string
+    {
+        return config('filament-ticketing.ticket-resource');
+    }
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

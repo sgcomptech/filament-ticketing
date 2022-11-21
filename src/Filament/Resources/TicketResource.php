@@ -45,8 +45,12 @@ class TicketResource extends Resource
 		return $form
 			->schema([
 				Card::make([
-					Placeholder::make('User Name')->content(fn ($record) => $record->user->name),
-					Placeholder::make('User Email')->content(fn ($record) => $record->user->email),
+					Placeholder::make('User Name')
+						->content(fn ($record) => $record?->user->name)
+						->hiddenOn('create'),
+					Placeholder::make('User Email')
+						->content(fn ($record) => $record?->user->email)
+						->hiddenOn('create'),
 					TextInput::make('title')->required()->maxLength(255)->columnSpan(2)->disabledOn('edit'),
 					Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
 					Select::make('status')->options(config('filament-ticketing.statuses'))

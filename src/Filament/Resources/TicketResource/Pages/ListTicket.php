@@ -3,7 +3,6 @@
 namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
 use Filament\Resources\Pages\ListRecords;
-use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 use Filament\Pages\Actions\CreateAction;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\HtmlString;
@@ -18,14 +17,17 @@ class ListTicket extends ListRecords
     protected $queryString = ['rec', 'recid'];
     protected ?Model $recInstance;
 
-    protected static string $resource = TicketResource::class;
-
     public function mount(): void
     {
         parent::mount();
         $this->recInstance = ($this->rec && $this->recid)
             ? $this->rec::findOrFail($this->recid)
             : null;
+    }
+
+    public static function getResource(): string
+    {
+        return config('filament-ticketing.ticket-resource');
     }
 
     protected function getActions(): array

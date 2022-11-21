@@ -3,15 +3,18 @@
 namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
 use Filament\Resources\Pages\EditRecord;
-use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 use Filament\Pages\Actions\DeleteAction;
 use Sgcomptech\FilamentTicketing\Events\NewAssignment;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class EditTicket extends EditRecord
 {
-    protected static string $resource = TicketResource::class;
     public $prev_assigned_to_id;
+
+    public static function getResource(): string
+    {
+        return config('filament-ticketing.ticket-resource');
+    }
 
     protected function getActions(): array
     {

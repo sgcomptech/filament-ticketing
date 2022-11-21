@@ -1,4 +1,4 @@
-# A Laravel Filament plugin to support issue tracking and ticketing system.
+# Filament Ticketing
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sgcomptech/filament-ticketing.svg?style=flat-square)](https://packagist.org/packages/sgcomptech/filament-ticketing)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/sgcomptech/filament-ticketing/run-tests?label=tests)](https://github.com/sgcomptech/filament-ticketing/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -6,9 +6,6 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/sgcomptech/filament-ticketing.svg?style=flat-square)](https://packagist.org/packages/sgcomptech/filament-ticketing)
 
 A Laravel Filament Admin Panel plugin package to add support for issue tracking and ticketing system into your Filament project.
-
-## Support us
-
 
 ## Installation
 
@@ -30,41 +27,149 @@ You can publish the config file with:
 php artisan vendor:publish --tag="filament-ticketing-config"
 ```
 
-This is the contents of the published config file:
+This is the content of the published config file:
 
 ```php
 return [
+	// Defines your user model. At the moment, requires 'name' and 'email' attributes.
+	'user-model' => \App\Models\User::class,
+
+	// You can extend the package's TicketResource to customize to your needs.
+	'ticket-resource' => Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
+
+	// whether a ticket must be strictly associated with another model
+	'is_strictly_associated' => false,
+
+	// filament navigation
+	'navigation' => [
+		'group' => 'Tickets',
+		'sort' => 1,
+	],
+
+	// ticket statuses
+	'statuses' => [
+		0 => 'Open',
+		1 => 'Pending',
+		2 => 'Resolved',
+		2 => 'Closed',
+	],
+
+	// ticket priorities
+	'priorities' => [
+		0 => 'Low',
+		1 => 'Normal',
+		2 => 'High',
+		3 => 'Critical',
+	],
+
+	// use authorization
+	'use_authorization' => false,
+
+	// event broadcast channel
+	'event_broadcast_channel' => 'ticket-channel',
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="filament-ticketing-views"
 ```
 
 ## Usage
 
-### Filament Admin Panel Menu
+### Associate tickets to your model
 
-As with most other Filament resources, you can control and secure the access of Ticket operations in Admin Panel's menu with a policy file. For example, you can create a new policy file at app/Policies/TicketPolicy.php and register in your AuthServiceProvider.
+Tickets could be on general matters or could be related to some instances in your project.
+For example, your users may raise a ticket that is related to one of their past orders.
+In such case, you may want to associate that order with the tickets raised.
+You can achieve this by implementing `HasTickets` and use `InteractsWithTickets` trait in your eloquent model class.
+By default, this package uses the model attribute `name` for display.
+You can change this by implementing `public function model_name(): string`.
 
 ```php
+use Illuminate\Database\Eloquent\Model;
+use Sgcomptech\FilamentTicketing\Interfaces\HasTickets;
+use Sgcomptech\FilamentTicketing\Traits\InteractsWithTickets;
+
+class Item extends Model implements HasTickets
+{
+    use InteractsWithTickets;
+
+}
+```
+
+It is possible to implement `HasTickets` on multiple models in your project.
+
+### Filament Admin Panel Menu
+
+As with most other Filament resources, you can control and secure the access of Ticket operations in Admin Panel's menu with a policy file. For example, you can create a new policy file and register it in your AuthServiceProvider.
+
+```php
+protected $policies = [
+		'Sgcomptech\FilamentTicketing\Models\Ticket' => 'App\Policies\TicketPolicy',
+];
 ```
 
 For more details, see [Laravel model policies](https://laravel.com/docs/9.x/authorization#creating-policies).
 
 ### Authorization
 
-This package has to option to use Laravel policies to authorise various actions performed on the tickets.
+This package has an option to use Laravel policies to authorise various actions that can be performed on the tickets.
 
-Besides the usual Filament resource polices, the additional permissions to implement are:
+Besides the usual Filament resource policies, the additional permissions to implement are:
 
 1. `manageAllTickets` - grant permission to user who can add comments and change status of any tickets.
 2. `manageAssignedTickets` - grant permission to user who can only add comments and change status to tickets that are explicitly assigned to them.
 3. `assignTickets` - grant permission to user who can assign tickets to any users who have the permission `manageAssignedTickets`.
 
-TODO: give example of implementation with Spatie Laravel-Permission
+For example, you may use other authorization packages, like [Filament User Authentication](https://github.com/phpsa/filament-authentication), to implement `TicketPolicies` in your policy file like so:
+
+```php
+use App\Models\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Sgcomptech\FilamentTicketing\Interfaces\TicketPolicies;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
+
+class TicketPolicy implements TicketPolicies
+{
+    use HandlesAuthorization;
+
+    public function viewAny(User $user)
+    {
+        return true;
+    }
+
+    public function view(User $user, Ticket $ticket)
+    {
+        return true;
+    }
+
+    public function create(User $user)
+    {
+        return true;
+    }
+
+    public function update(User $user, Ticket $ticket)
+    {
+        return true;
+    }
+
+    public function delete(User $user, Ticket $ticket)
+    {
+        return $user->can('Delete Tickets');
+    }
+
+    public function manageAllTickets($user): bool
+    {
+        return $user->can('Manage All Tickets');
+    }
+
+    public function manageAssignedTickets($user): bool
+    {
+        return $user->can('Manage Assigned Tickets');
+    }
+
+    public function assignTickets($user): bool
+    {
+        return $user->can('Assign Tickets');
+    }
+}
+```
 
 ### Events
 
@@ -84,6 +189,11 @@ You can use these events to send notifications to relevant users in your applica
 ```bash
 composer test
 ```
+
+## Todo
+
+- [ ] Translation
+- [ ] Attach media or files to ticket
 
 ## Changelog
 

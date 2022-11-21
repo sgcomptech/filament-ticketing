@@ -5,8 +5,9 @@ namespace Sgcomptech\FilamentTicketing\Tests\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Sgcomptech\FilamentTicketing\Tests\User;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
+use Sgcomptech\FilamentTicketing\Interfaces\TicketPolicies;
 
-class TicketPolicy
+class TicketPolicy implements TicketPolicies
 {
     use HandlesAuthorization;
 
@@ -95,20 +96,20 @@ class TicketPolicy
         return false;
     }
 
-    public function manageAllTickets(User $user)
+    public function manageAllTickets($user): bool
     {
         return ($user->id == 1) || str_contains($user->name, 'Administrator')
           || str_contains($user->name, 'Manager');
     }
 
-    public function manageAssignedTickets(User $user)
+    public function manageAssignedTickets($user): bool
     {
         return ($user->id == 1) || str_contains($user->name, 'Administrator')
           || str_contains($user->name, 'Manager')
           || str_contains($user->name, 'Support');
     }
 
-    public function assignTickets(User $user)
+    public function assignTickets($user): bool
     {
         return ($user->id == 1) || str_contains($user->name, 'Administrator')
           || str_contains($user->name, 'Manager');
