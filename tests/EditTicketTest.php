@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\CreateTicket;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages\EditTicket;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 use Sgcomptech\FilamentTicketing\Tests\User;
+use Sgcomptech\FilamentTicketing\Tests\Item;
 
 use function Pest\Livewire\livewire;
 
@@ -22,9 +24,9 @@ it('Update tickets with authorization', function () {
 	DB::insert("insert into tickets
 	 (id, identifier,  ticketable_type, ticketable_id, user_id, assigned_to_id, status, priority,      title,     content,   created_at, updated_at) values
 	  (1, '1',                    null,          null, $userA->id,           null,      0,        0, 'Ticket 1', 'Content 1', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
-	  (2, '2',       'App\Models\Item',             1, $userA->id,   $manager->id,      0,        0, 'Ticket 2', 'Content 2', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
-	  (3, '3',       'App\Models\Item',             1, $userB->id,  $supportA->id,      3,        0, 'Ticket 3', 'Content 3', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
-	  (4, '4',       'App\Models\Item',             2, $userB->id,  $supportB->id,      2,        0, 'Ticket 4', 'Content 4', '2022-10-10 00:00:00', '2022-10-10 00:00:00');
+	  (2, '2',                    null,          null, $userA->id,   $manager->id,      0,        0, 'Ticket 2', 'Content 2', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
+	  (3, '3',                    null,          null, $userB->id,  $supportA->id,      3,        0, 'Ticket 3', 'Content 3', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
+	  (4, '4',                    null,          null, $userB->id,  $supportB->id,      2,        0, 'Ticket 4', 'Content 4', '2022-10-10 00:00:00', '2022-10-10 00:00:00');
 	");
 
 	$this->actingAs($admin);
@@ -52,4 +54,23 @@ it('Update tickets with authorization', function () {
 	$this->actingAs($userB);
 	livewire(EditTicket::class, ['record' => 3])->assertFormFieldIsDisabled('status');
 	livewire(EditTicket::class, ['record' => 4])->assertFormFieldIsDisabled('status');
+});
+
+it('tickets with association', function () {
+	$user = User::factory()->create();
+	$item = Item::factory()->create();
+
+	$this->be($user);
+	livewire(CreateTicket::class, ['rec' => $item->model_class(), 'recid' => $item->id])
+		->fillForm([
+			'title' => $title = fake()->words(5, true),
+			'content' => fake()->words(10, true),
+			'priority' => 0,
+		])
+		->call('create');
+	$ticket = Ticket::where('title', $title)->firstOrFail();
+
+	livewire(EditTicket::class, ['record' => $ticket->id])
+		->assertSee("[{$item->name}]");
+
 });

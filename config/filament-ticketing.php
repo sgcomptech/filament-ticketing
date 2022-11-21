@@ -6,6 +6,9 @@ return [
 		Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
 	],
 
+	// whether a ticket must be strictly associated with another model
+	'is_strictly_associated' => false,
+
 	// filament navigation
 	'navigation' => [
 		'group' => 'Tickets',

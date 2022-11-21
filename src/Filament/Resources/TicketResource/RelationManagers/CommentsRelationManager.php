@@ -17,6 +17,7 @@ use Sgcomptech\FilamentTicketing\Events\NewComment;
 use Sgcomptech\FilamentTicketing\Events\NewResponse;
 use Sgcomptech\FilamentTicketing\Models\Comment;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
+use Illuminate\Database\Eloquent\Model;
 
 class CommentsRelationManager extends RelationManager
 {
@@ -41,8 +42,8 @@ class CommentsRelationManager extends RelationManager
                     Split::make([
                         TextColumn::make('user.name')
                             ->weight('bold')
-                            ->color(fn (LivewireComponent $livewire) =>
-                                $livewire->ownerRecord->user_id == $user->id ? 'primary' : 'success')
+                            ->color(fn (LivewireComponent $livewire, Model $record) =>
+                                $livewire->ownerRecord->user_id == $record->user_id ? 'primary' : 'success')
                             ->grow(false),
                         TextColumn::make('created_at')->dateTime()->color('secondary'),
                     ]),

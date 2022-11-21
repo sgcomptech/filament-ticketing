@@ -15,15 +15,13 @@ class EditTicket extends EditRecord
 
     protected function getActions(): array
     {
-        return (!config('filament-ticketing.use_authorization') ||
-            auth()->user()->can('deleteTickets', Ticket::class)) ? [
-                DeleteAction::make(),
-            ] : [];
+        return [DeleteAction::make()];
     }
 
     protected function getTitle(): string
     {
-        return 'Ticket';
+        $associated = $this->record?->ticketable;
+        return 'Ticket [' . $associated?->{$associated?->model_name()} . ']';
     }
 
     protected function afterFill()

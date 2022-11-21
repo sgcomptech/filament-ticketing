@@ -95,11 +95,6 @@ class TicketPolicy
         return false;
     }
 
-    public function deleteTickets(User $user)
-    {
-        return ($user->id == 1) || str_contains($user->name, 'Administrator');
-    }
-
     public function manageAllTickets(User $user)
     {
         return ($user->id == 1) || str_contains($user->name, 'Administrator')

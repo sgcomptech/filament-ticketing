@@ -30,10 +30,14 @@ class ListTicket extends ListRecords
 
     protected function getActions(): array
     {
-        return [
-            CreateAction::make()->url(route('filament.resources.tickets.create',
-                ['rec' => $this->rec, 'recid' => $this->recid])),
-        ];
+        if (config('filament-ticketing.is_strictly_associated') && empty($this->rec)) {
+            return [];
+        } else {
+            return [
+                CreateAction::make()->url(route('filament.resources.tickets.create',
+                    ['rec' => $this->rec, 'recid' => $this->recid])),
+            ];
+        }
     }
 
     public function getTableHeading(): Htmlable | null
@@ -49,7 +53,6 @@ class ListTicket extends ListRecords
     {
         if (config('filament-ticketing.use_authorization')) {
             $user = auth()->user();
-            /** @var mixed $user */
 
             if ($user->can('manageAllTickets', Ticket::class)) {
                 $builder = parent::getTableQuery();

@@ -146,3 +146,18 @@ it('List correct tickets for associated model', function () {
 		->assertDontSee([$title1, $title2, $title3]);
 
 });
+
+it('strictly associated test', function () {
+	$user = User::factory()->create(['name' => 'User']);
+	$this->be($user);
+	livewire(ListTicket::class)
+		->assertSee('New ticket');
+
+	config(['filament-ticketing.is_strictly_associated' => true]);
+	livewire(ListTicket::class)
+		->assertDontSee('New ticket');
+
+	$item = Item::factory()->create();
+	livewire(ListTicket::class, ['rec' => $item->model_class(), 'recid' => $item->id])
+		->assertSee('New ticket');
+});

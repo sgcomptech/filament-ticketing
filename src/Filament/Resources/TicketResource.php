@@ -3,6 +3,7 @@
 namespace Sgcomptech\FilamentTicketing\Filament\Resources;
 
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -44,6 +45,8 @@ class TicketResource extends Resource
 		return $form
 			->schema([
 				Card::make([
+					Placeholder::make('User Name')->content(fn ($record) => $record->user->name),
+					Placeholder::make('User Email')->content(fn ($record) => $record->user->email),
 					TextInput::make('title')->required()->maxLength(255)->columnSpan(2)->disabledOn('edit'),
 					Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
 					Select::make('status')->options(config('filament-ticketing.statuses'))
@@ -60,11 +63,12 @@ class TicketResource extends Resource
 						->hint('Key in 3 or more characters to begin search')
 						->searchable()
 						->getSearchResultsUsing(function ($search) {
+							// TODO: optimize this
 							if (strlen($search) < 3) return [];
 							return config('filament-ticketing.user-model')::where('name', 'like', "%{$search}%")
 								->limit(50)
 								->get()
-								->filter(fn ($user) => $user->can('manageAssignedTickets'))
+								->filter(fn ($user) => $user->can('manageAssignedTickets', Ticket::class))
 								->pluck('name', 'id');
 						})
 						->getOptionLabelUsing(fn ($value): ?string => config('filament-ticketing.user-model')::find($value)?->name)
