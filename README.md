@@ -45,7 +45,24 @@ php artisan vendor:publish --tag="filament-ticketing-views"
 
 ## Usage
 
+### Authorization
+
 This package has to option to use Laravel policies to authorise various actions performed on the tickets.
+
+Besides the usual Filament resource polices, the additional permissions to implement are:
+
+1. `manageAllTickets` - grant permission to user who can add comments and change status of any tickets.
+2. `manageAssignedTickets` - grant permission to user who can only add comments and change status to tickets that are explicitly assigned to them.
+3. `assignTickets` - grant permission to user who can assign tickets to any users who have the permission `manageAssignedTickets`.
+
+### Events
+
+This package will dispatch the following events:
+
+| Event | Description |
+| ----------- | ----------- |
+| Sgcomptech\FilamentTicketing\Events\NewTicket | When a new ticket is created |
+
 ```php
 ```
 
