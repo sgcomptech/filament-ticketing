@@ -5,6 +5,7 @@ namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 use Filament\Resources\Pages\CreateRecord;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource;
 use Illuminate\Support\Str;
+use Sgcomptech\FilamentTicketing\Events\NewTicket;
 
 class CreateTicket extends CreateRecord
 {
@@ -34,5 +35,10 @@ class CreateTicket extends CreateRecord
         } else {
             return null;
         }
+    }
+
+    protected function afterCreate(): void
+    {
+        NewTicket::dispatch($this->record);
     }
 }

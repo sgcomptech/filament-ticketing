@@ -13,6 +13,8 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Livewire\Component as LivewireComponent;
+use Sgcomptech\FilamentTicketing\Events\NewComment;
+use Sgcomptech\FilamentTicketing\Events\NewResponse;
 use Sgcomptech\FilamentTicketing\Models\Comment;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 
@@ -57,13 +59,20 @@ class CommentsRelationManager extends RelationManager
                         $ticket = $livewire->ownerRecord;
                         abort_unless(
                             config('filament-ticketing.use_authorization') == false ||
-                            $ticket->user_id == $user->id || $ticket->assigned_to_id == $user->id ||
-                            $user->can('manageAllTickets', Ticket::class), 403);
-                        Comment::create([
+                            $ticket->user_id == $user->id ||
+                            $ticket->assigned_to_id == $user->id ||
+                            $user->can('manageAllTickets', Ticket::class),
+                        403);
+                        $comment = Comment::create([
                             'content' => $data['content'],
                             'user_id' => $user->id,
                             'ticket_id' => $livewire->ownerRecord->id,
                         ]);
+                        if ($livewire->ownerRecord->user_id == $user->id) {
+                            NewComment::dispatch($comment);
+                        } else {
+                            NewResponse::dispatch($comment);
+                        }
                     })
             ])
             ->defaultSort('id', 'desc');

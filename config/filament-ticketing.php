@@ -30,4 +30,7 @@ return [
 
 	// use authorization
 	'use_authorization' => false,
+
+	// event broadcast channel
+	'event_broadcast_channel' => 'ticket-channel',
 ];

@@ -55,16 +55,18 @@ Besides the usual Filament resource polices, the additional permissions to imple
 2. `manageAssignedTickets` - grant permission to user who can only add comments and change status to tickets that are explicitly assigned to them.
 3. `assignTickets` - grant permission to user who can assign tickets to any users who have the permission `manageAssignedTickets`.
 
+TODO: give example of implementation with Spatie permission
+
 ### Events
 
-This package will dispatch the following events:
+This package will dispatch the following events as listed in the table below. Note that the namespace of these events is `Sgcomptech\FilamentTicketing\Events`.
 
-| Event | Description |
-| ----------- | ----------- |
-| Sgcomptech\FilamentTicketing\Events\NewTicket | When a new ticket is created |
-
-```php
-```
+| Event | Event Object | Description |
+| ----------- | ----------- | ----------- |
+| `NewTicket` | `Ticket` | When a new ticket is created. |
+| `NewComment` | `Comment` | When a new comment is created. |
+| `NewResponse` | `Comment` | When a new response is created. |
+| `NewAssignment` | `Ticket` | When a ticket is being assigned to a user. |
 
 ## Testing
 
