@@ -18,7 +18,7 @@ class NewResponse
     /**
      * Create a new event instance.
      *
-		 * @param Sgcomptech\FilamentTicketing\Models\Ticket $ticket
+	 * @param Sgcomptech\FilamentTicketing\Models\Comment $response
      * @return void
      */
     public function __construct(public Comment $response)

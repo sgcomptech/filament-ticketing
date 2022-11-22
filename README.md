@@ -31,42 +31,42 @@ This is the content of the published config file:
 
 ```php
 return [
-	// Defines your user model. At the moment, requires 'name' and 'email' attributes.
-	'user-model' => \App\Models\User::class,
+  // Defines your user model. At the moment, requires 'name' and 'email' attributes.
+  'user-model' => \App\Models\User::class,
 
-	// You can extend the package's TicketResource to customize to your needs.
-	'ticket-resource' => Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
+  // You can extend the package's TicketResource to customize to your needs.
+  'ticket-resource' => Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
 
-	// whether a ticket must be strictly associated with another model
-	'is_strictly_associated' => false,
+  // whether a ticket must be strictly associated with another model
+  'is_strictly_associated' => false,
 
-	// filament navigation
-	'navigation' => [
-		'group' => 'Tickets',
-		'sort' => 1,
-	],
+  // filament navigation
+  'navigation' => [
+	  'group' => 'Tickets',
+	  'sort' => 1,
+  ],
 
-	// ticket statuses
-	'statuses' => [
-		0 => 'Open',
-		1 => 'Pending',
-		2 => 'Resolved',
-		2 => 'Closed',
-	],
+  // ticket statuses
+  'statuses' => [
+	  0 => 'Open',
+	  1 => 'Pending',
+	  2 => 'Resolved',
+	  2 => 'Closed',
+  ],
 
-	// ticket priorities
-	'priorities' => [
-		0 => 'Low',
-		1 => 'Normal',
-		2 => 'High',
-		3 => 'Critical',
-	],
+  // ticket priorities
+  'priorities' => [
+	  0 => 'Low',
+	  1 => 'Normal',
+	  2 => 'High',
+	  3 => 'Critical',
+  ],
 
-	// use authorization
-	'use_authorization' => false,
+  // use authorization
+  'use_authorization' => false,
 
-	// event broadcast channel
-	'event_broadcast_channel' => 'ticket-channel',
+  // event broadcast channel
+  'event_broadcast_channel' => 'ticket-channel',
 ];
 ```
 
@@ -88,8 +88,7 @@ use Sgcomptech\FilamentTicketing\Traits\InteractsWithTickets;
 
 class Item extends Model implements HasTickets
 {
-    use InteractsWithTickets;
-
+  use InteractsWithTickets;
 }
 ```
 
@@ -101,7 +100,7 @@ As with most other Filament resources, you can control and secure the access of 
 
 ```php
 protected $policies = [
-		'Sgcomptech\FilamentTicketing\Models\Ticket' => 'App\Policies\TicketPolicy',
+  'Sgcomptech\FilamentTicketing\Models\Ticket' => 'App\Policies\TicketPolicy',
 ];
 ```
 
@@ -127,47 +126,47 @@ use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class TicketPolicy implements TicketPolicies
 {
-    use HandlesAuthorization;
+  use HandlesAuthorization;
 
-    public function viewAny(User $user)
-    {
-        return true;
-    }
+  public function viewAny(User $user)
+  {
+    return true;
+  }
 
-    public function view(User $user, Ticket $ticket)
-    {
-        return true;
-    }
+  public function view(User $user, Ticket $ticket)
+  {
+    return true;
+  }
 
-    public function create(User $user)
-    {
-        return true;
-    }
+  public function create(User $user)
+  {
+    return true;
+  }
 
-    public function update(User $user, Ticket $ticket)
-    {
-        return true;
-    }
+  public function update(User $user, Ticket $ticket)
+  {
+    return true;
+  }
 
-    public function delete(User $user, Ticket $ticket)
-    {
-        return $user->can('Delete Tickets');
-    }
+  public function delete(User $user, Ticket $ticket)
+  {
+    return $user->can('Delete Tickets');
+  }
 
-    public function manageAllTickets($user): bool
-    {
-        return $user->can('Manage All Tickets');
-    }
+  public function manageAllTickets($user): bool
+  {
+    return $user->can('Manage All Tickets');
+  }
 
-    public function manageAssignedTickets($user): bool
-    {
-        return $user->can('Manage Assigned Tickets');
-    }
+  public function manageAssignedTickets($user): bool
+  {
+    return $user->can('Manage Assigned Tickets');
+  }
 
-    public function assignTickets($user): bool
-    {
-        return $user->can('Assign Tickets');
-    }
+  public function assignTickets($user): bool
+  {
+    return $user->can('Assign Tickets');
+  }
 }
 ```
 

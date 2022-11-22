@@ -18,7 +18,7 @@ class NewTicket
     /**
      * Create a new event instance.
      *
-		 * @param Sgcomptech\FilamentTicketing\Models\Ticket $ticket
+	 * @param Sgcomptech\FilamentTicketing\Models\Ticket $ticket
      * @return void
      */
     public function __construct(public Ticket $ticket)
