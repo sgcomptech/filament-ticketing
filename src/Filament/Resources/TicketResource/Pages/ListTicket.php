@@ -32,7 +32,7 @@ class ListTicket extends ListRecords
 
     protected function getActions(): array
     {
-        if (config('filament-ticketing.is_strictly_associated') && empty($this->rec)) {
+        if (config('filament-ticketing.is_strictly_interacted') && empty($this->rec)) {
             return [];
         } else {
             return [

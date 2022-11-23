@@ -63,7 +63,7 @@ it('List tickets with authorization', function () {
 		->assertDontSee(['Ticket 1', 'Ticket 2']);
 });
 
-it('List correct tickets for associated model', function () {
+it('List correct tickets for interacted model', function () {
 	config(['filament-ticketing.use_authorization' => true]);
 	$superUser = User::factory()->create(['id' => 1]);
 	$admin = User::factory()->create(['name' => 'Administrator']);
@@ -147,13 +147,13 @@ it('List correct tickets for associated model', function () {
 
 });
 
-it('strictly associated test', function () {
+it('strictly interacted test', function () {
 	$user = User::factory()->create(['name' => 'User']);
 	$this->be($user);
 	livewire(ListTicket::class)
 		->assertSee('New ticket');
 
-	config(['filament-ticketing.is_strictly_associated' => true]);
+	config(['filament-ticketing.is_strictly_interacted' => true]);
 	livewire(ListTicket::class)
 		->assertDontSee('New ticket');
 

@@ -5,8 +5,8 @@ return [
 	// You can extend the package's TicketResource to customize to your needs.
 	'ticket-resource' => Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
 
-	// whether a ticket must be strictly associated with another model
-	'is_strictly_associated' => false,
+	// whether a ticket must be strictly interacted with another model
+	'is_strictly_interacted' => false,
 
 	// filament navigation
 	'navigation' => [

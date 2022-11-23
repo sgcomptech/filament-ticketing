@@ -23,8 +23,8 @@ class EditTicket extends EditRecord
 
     protected function getTitle(): string
     {
-        $associated = $this->record?->ticketable;
-        return 'Ticket [' . $associated?->{$associated?->model_name()} . ']';
+        $interacted = $this->record?->ticketable;
+        return 'Ticket [' . $interacted?->{$interacted?->model_name()} . ']';
     }
 
     protected function afterFill()

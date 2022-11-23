@@ -7,6 +7,14 @@
 
 A Laravel Filament Admin Panel plugin package to add support for issue tracking and ticketing system into your Filament project.
 
+## Requirements
+
+| Software | Versions |
+| -------- | -------- |
+| PHP | 8.0, 8.1 |
+| Laravel | 8.x, 9.x |
+| Filament | 2.x |
+
 ## Installation
 
 You can install the package via composer:
@@ -37,8 +45,8 @@ return [
   // You can extend the package's TicketResource to customize to your needs.
   'ticket-resource' => Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource::class,
 
-  // whether a ticket must be strictly associated with another model
-  'is_strictly_associated' => false,
+  // whether a ticket must be strictly interacted with another model
+  'is_strictly_interacted' => false,
 
   // filament navigation
   'navigation' => [
@@ -72,14 +80,14 @@ return [
 
 ## Usage
 
-### Associate tickets to your model
+### Interact your models with tickets
 
 Tickets could be on general matters or could be related to some instances in your project.
 For example, your users may raise a ticket that is related to one of their past orders.
-In such case, you may want to associate that order with the tickets raised.
+In such case, you may want to interact that order with the tickets raised.
 You can achieve this by implementing `HasTickets` and use `InteractsWithTickets` trait in your eloquent model class.
 By default, this package uses the model attribute `name` for display.
-You can change this by implementing `public function model_name(): string`.
+You can change this by implementing `public function model_name(): string` to return the required attribute for display.
 
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -89,6 +97,24 @@ use Sgcomptech\FilamentTicketing\Traits\InteractsWithTickets;
 class Item extends Model implements HasTickets
 {
   use InteractsWithTickets;
+}
+```
+
+Once your model is prepared, you can add a table action button at the model resource to navigate to the linked ticket list page.
+At this list page, the associated tickets for that model instance will be displayed and any new tickets created will also be linked to that model instance.
+
+```php
+use Sgcomptech\FilamentTicketing\Tables\Actions\TicketAction;
+
+public static function table(Table $table): Table
+{
+  return $table
+		->columns([
+			TextColumn::make('name'),
+		])
+		->actions([
+			TicketAction::make('ticket'),
+		]);
 }
 ```
 
@@ -145,7 +171,10 @@ class TicketPolicy implements TicketPolicies
 
   public function update(User $user, Ticket $ticket)
   {
-    return true;
+    return $user->can('manage all tickets')
+      || $user->can('assign tickets')
+      || ($user->can('manage assigned tickets') && $ticket->assigned_to_id == $user->id)
+      || $ticket->user_id == $user->id;
   }
 
   public function delete(User $user, Ticket $ticket)
@@ -192,6 +221,9 @@ composer test
 ## Todo
 
 - [ ] Translation
+- [ ] List tickets filters
+- [ ] Badges
+- [ ] Widget
 - [ ] Attach media or files to ticket
 
 ## Changelog
