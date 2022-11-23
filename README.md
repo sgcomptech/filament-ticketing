@@ -232,7 +232,9 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+If you want to contribute to Filament Ticketing packages, you may fork this repository, create a new branch, make you changes and submit a PR.
+Be sure to run the test scripts to make sure that nothing else is broken.
+More details can be found at [github quickstart](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
 
 ## Security Vulnerabilities
 
