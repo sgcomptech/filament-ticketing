@@ -7,6 +7,12 @@
 
 A Laravel Filament Admin Panel plugin package to add support for issue tracking and ticketing system into your Filament project.
 
+![Create Ticket](./images/createticket.png)
+
+![List Ticket](./images/listtickets.png)
+
+![Comments](./images/comments.png)
+
 ## Requirements
 
 | Software | Versions |
@@ -113,10 +119,13 @@ public static function table(Table $table): Table
 			TextColumn::make('name'),
 		])
 		->actions([
+			EditAction::make(),
 			TicketAction::make('ticket'),
 		]);
 }
 ```
+
+![Table action](./images/tableaction.png)
 
 It is possible to implement `HasTickets` on multiple models in your project.
 
