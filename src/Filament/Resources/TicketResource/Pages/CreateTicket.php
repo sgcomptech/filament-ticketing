@@ -8,8 +8,12 @@ use Sgcomptech\FilamentTicketing\Events\NewTicket;
 
 class CreateTicket extends CreateRecord
 {
-    public $rec, $recid;
+    public $rec;
+
+    public $recid;
+
     protected $queryString = ['rec', 'recid'];
+
     protected static bool $canCreateAnother = false;
 
     public static function getResource(): string
@@ -27,6 +31,7 @@ class CreateTicket extends CreateRecord
         $data['user_id'] = auth()->id();
         $data['identifier'] = strtoupper(Str::random(8));
         $data['status'] = 0; // first state
+
         return $data;
     }
 
@@ -34,6 +39,7 @@ class CreateTicket extends CreateRecord
     {
         if ($this->rec) {
             $recInstance = $this->rec::findOrFail($this->recid);
+
             return $recInstance->{$recInstance->model_name()};
         } else {
             return null;

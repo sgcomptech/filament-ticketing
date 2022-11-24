@@ -2,26 +2,25 @@
 
 namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Forms\Components\Card;
-use Filament\Resources\Form;
 use Filament\Forms\Components\Textarea;
+use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component as LivewireComponent;
 use Sgcomptech\FilamentTicketing\Events\NewComment;
 use Sgcomptech\FilamentTicketing\Events\NewResponse;
 use Sgcomptech\FilamentTicketing\Models\Comment;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
-use Illuminate\Database\Eloquent\Model;
 
 class CommentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'comments';
+
     protected static ?string $recordTitleAttribute = 'user.name';
 
     public static function form(Form $form): Form
@@ -42,8 +41,7 @@ class CommentsRelationManager extends RelationManager
                     Split::make([
                         TextColumn::make('user.name')
                             ->weight('bold')
-                            ->color(fn (LivewireComponent $livewire, Model $record) =>
-                                $livewire->ownerRecord->user_id == $record->user_id ? 'primary' : 'success')
+                            ->color(fn (LivewireComponent $livewire, Model $record) => $livewire->ownerRecord->user_id == $record->user_id ? 'primary' : 'success')
                             ->grow(false),
                         TextColumn::make('created_at')->dateTime()->color('secondary'),
                     ]),
@@ -63,7 +61,8 @@ class CommentsRelationManager extends RelationManager
                             $ticket->user_id == $user->id ||
                             $ticket->assigned_to_id == $user->id ||
                             $user->can('manageAllTickets', Ticket::class),
-                        403);
+                            403
+                        );
                         $comment = Comment::create([
                             'content' => $data['content'],
                             'user_id' => $user->id,
@@ -74,7 +73,7 @@ class CommentsRelationManager extends RelationManager
                         } else {
                             NewResponse::dispatch($comment);
                         }
-                    })
+                    }),
             ])
             ->defaultSort('id', 'desc');
     }

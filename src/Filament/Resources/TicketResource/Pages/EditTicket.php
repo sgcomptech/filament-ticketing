@@ -2,10 +2,9 @@
 
 namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
-use Filament\Resources\Pages\EditRecord;
 use Filament\Pages\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
 use Sgcomptech\FilamentTicketing\Events\NewAssignment;
-use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class EditTicket extends EditRecord
 {
@@ -24,6 +23,7 @@ class EditTicket extends EditRecord
     protected function getTitle(): string
     {
         $interacted = $this->record?->ticketable;
+
         return 'Ticket [' . $interacted?->{$interacted?->model_name()} . ']';
     }
 

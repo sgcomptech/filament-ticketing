@@ -2,8 +2,8 @@
 
 namespace Sgcomptech\FilamentTicketing;
 
-use Spatie\LaravelPackageTools\Package;
 use Filament\PluginServiceProvider;
+use Spatie\LaravelPackageTools\Package;
 
 class FilamentTicketingServiceProvider extends PluginServiceProvider
 {
@@ -31,6 +31,6 @@ class FilamentTicketingServiceProvider extends PluginServiceProvider
 
     protected function getResources(): array
     {
-        return [ config('filament-ticketing.ticket-resource') ];
+        return [config('filament-ticketing.ticket-resource')];
     }
 }

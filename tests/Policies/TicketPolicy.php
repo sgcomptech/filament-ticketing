@@ -3,9 +3,9 @@
 namespace Sgcomptech\FilamentTicketing\Tests\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Sgcomptech\FilamentTicketing\Tests\User;
-use Sgcomptech\FilamentTicketing\Models\Ticket;
 use Sgcomptech\FilamentTicketing\Interfaces\TicketPolicies;
+use Sgcomptech\FilamentTicketing\Models\Ticket;
+use Sgcomptech\FilamentTicketing\Tests\User;
 
 class TicketPolicy implements TicketPolicies
 {
