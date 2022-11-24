@@ -4,6 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/sgcomptech/filament-ticketing/run-tests?label=tests)](https://github.com/sgcomptech/filament-ticketing/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/sgcomptech/filament-ticketing/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/sgcomptech/filament-ticketing/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/sgcomptech/filament-ticketing.svg?style=flat-square)](https://packagist.org/packages/sgcomptech/filament-ticketing)
+[![CodeFactor](https://www.codefactor.io/repository/github/sgcomptech/filament-ticketing/badge)](https://www.codefactor.io/repository/github/sgcomptech/filament-ticketing)
 
 A Laravel Filament Admin Panel plugin package to add support for issue tracking and ticketing system into your Filament project.
 
