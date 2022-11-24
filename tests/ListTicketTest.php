@@ -72,9 +72,9 @@ it('List correct tickets for interacted model', function () {
 	$userA = User::factory()->create(['name' => 'User A']);
 	$userB = User::factory()->create(['name' => 'User B']);
 
-	$itemA = Item::factory()->create();
-	$itemB = Item::factory()->create();
-	$itemC = Item::factory()->create();
+	$itemA = Item::factory()->create(['name' => 'Item A']);
+	$itemB = Item::factory()->create(['name' => 'Item B']);
+	$itemC = Item::factory()->create(['name' => 'Item C']);
 
 	$this->actingAs($userA);
 
