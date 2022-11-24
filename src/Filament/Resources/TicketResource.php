@@ -70,7 +70,6 @@ class TicketResource extends Resource
                         ->hint('Key in 3 or more characters to begin search')
                         ->searchable()
                         ->getSearchResultsUsing(function ($search) {
-                            // TODO: optimize this
                             if (strlen($search) < 3) {
                                 return [];
                             }
