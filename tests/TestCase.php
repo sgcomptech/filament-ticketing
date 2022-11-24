@@ -4,22 +4,21 @@ namespace Sgcomptech\FilamentTicketing\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Gate;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
+use Filament\SpatieLaravelSettingsPluginServiceProvider;
+use Filament\SpatieLaravelTranslatablePluginServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Gate;
 use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
+use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Sgcomptech\FilamentTicketing\FilamentTicketingServiceProvider;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 use Sgcomptech\FilamentTicketing\Tests\Policies\TicketPolicy;
-use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use Filament\SpatieLaravelSettingsPluginServiceProvider;
-use Filament\SpatieLaravelTranslatablePluginServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -58,14 +57,14 @@ class TestCase extends Orchestra
     {
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
-        $migration = include __DIR__.'/../database/migrations/create_tickets_table.php';
+        $migration = include __DIR__ . '/../database/migrations/create_tickets_table.php';
         $migration->up();
-        $migration = include __DIR__.'/../database/migrations/create_comments_table.php';
+        $migration = include __DIR__ . '/../database/migrations/create_comments_table.php';
         $migration->up();
     }
 

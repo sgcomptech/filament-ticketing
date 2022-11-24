@@ -9,7 +9,8 @@ use Sgcomptech\FilamentTicketing\Traits\InteractsWithTickets;
 
 class Item extends Model implements HasTickets
 {
-    use HasFactory, InteractsWithTickets;
+    use HasFactory;
+    use InteractsWithTickets;
 
     protected $guarded = [];
 

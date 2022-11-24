@@ -2,19 +2,22 @@
 
 namespace Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\Pages;
 
-use Filament\Resources\Pages\ListRecords;
 use Filament\Pages\Actions\CreateAction;
+use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\HtmlString;
-use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 
 class ListTicket extends ListRecords
 {
-    public $rec, $recid;
+    public $rec;
+
+    public $recid;
+
     protected $queryString = ['rec', 'recid'];
+
     protected ?Model $recInstance;
 
     public function mount(): void
@@ -36,8 +39,10 @@ class ListTicket extends ListRecords
             return [];
         } else {
             return [
-                CreateAction::make()->url(route('filament.resources.tickets.create',
-                    ['rec' => $this->rec, 'recid' => $this->recid])),
+                CreateAction::make()->url(route(
+                    'filament.resources.tickets.create',
+                    ['rec' => $this->rec, 'recid' => $this->recid]
+                )),
             ];
         }
     }
@@ -45,7 +50,7 @@ class ListTicket extends ListRecords
     public function getTableHeading(): Htmlable | null
     {
         return ($this->rec && $this->recid)
-            ? new HtmlString('Tickets for <b><em>' . 
+            ? new HtmlString('Tickets for <b><em>' .
                 $this->recInstance->{$this->recInstance->model_name()}
                 . '</em></b>')
             : null;
@@ -58,7 +63,7 @@ class ListTicket extends ListRecords
 
             if ($user->can('manageAllTickets', Ticket::class)) {
                 $builder = parent::getTableQuery();
-            } else if ($user->can('manageAssignedTickets', Ticket::class)) {
+            } elseif ($user->can('manageAssignedTickets', Ticket::class)) {
                 $builder = parent::getTableQuery()->where('assigned_to_id', $user->id);
             } else {
                 $builder = parent::getTableQuery()->where('user_id', $user->id);
@@ -66,6 +71,7 @@ class ListTicket extends ListRecords
         } else {
             $builder = parent::getTableQuery();
         }
+
         return ($this->rec && $this->recid)
             ? $builder
                 ->where('ticketable_type', $this->rec)
