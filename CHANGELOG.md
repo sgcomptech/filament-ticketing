@@ -2,6 +2,10 @@
 
 All notable changes to `filament-ticketing` will be documented in this file.
 
+## v1.1.0 - 2022-11-25
+
+- Implemented filters for listing tickets
+
 ## v1.0.1 - 2022-11-24
 
 - More definitive test
