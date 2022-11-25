@@ -17,8 +17,8 @@ it('Assign user to ticket', function () {
         'identifier' => '1',
         'user_id' => $user->id,
         'assigned_to_id' => $support->id,
-        'status' => 0,
-        'priority' => 0,
+        'status' => 1,
+        'priority' => 1,
         'title' => fake()->words(5, true),
         'content' => fake()->words(10, true),
     ]);

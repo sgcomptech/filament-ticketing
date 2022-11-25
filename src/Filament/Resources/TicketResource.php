@@ -12,6 +12,8 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 use Sgcomptech\FilamentTicketing\Filament\Resources\TicketResource\RelationManagers\CommentsRelationManager;
 use Sgcomptech\FilamentTicketing\Models\Ticket;
 
@@ -104,14 +106,23 @@ class TicketResource extends Resource
                 TextColumn::make('user.name')->sortable()->searchable(),
                 TextColumn::make('title')->searchable()->words(8),
                 TextColumn::make('status')
-                    ->formatStateUsing(fn ($record) => config("filament-ticketing.statuses.$record->status")),
+                    ->formatStateUsing(fn ($record) => config('filament-ticketing.statuses')[$record->status]),
                 TextColumn::make('priority')
                     ->formatStateUsing(fn ($record) => config("filament-ticketing.priorities.$record->priority"))
                     ->color(fn ($record) => $record->priorityColor()),
                 TextColumn::make('assigned_to.name')->visible($canManageAllTickets || $canManageAssignedTickets),
             ])
             ->filters([
-                //
+                Filter::make('filters')
+                    ->form([
+                        Select::make('status')->options(config('filament-ticketing.statuses')),
+                        Select::make('priority')->options(config('filament-ticketing.priorities')),
+                    ])
+                    ->query(
+                        fn (Builder $query, array $data) => $query
+                        ->when($data['status'], fn ($query, $status) => $query->where('status', $status))
+                        ->when($data['priority'], fn ($query, $priority) => $query->where('priority', $priority))
+                    ),
             ])
             ->actions([
                 // ViewAction::make(),

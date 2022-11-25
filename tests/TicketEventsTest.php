@@ -21,7 +21,7 @@ beforeEach(function () {
         ->fillForm([
             'title' => $this->title,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create');
     $this->ticket = Ticket::where('title', $this->title)->first();

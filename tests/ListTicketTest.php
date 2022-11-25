@@ -19,10 +19,10 @@ it('List tickets with authorization', function () {
 
     DB::insert("insert into tickets
 	 (id, identifier, ticketable_type, ticketable_id, user_id, assigned_to_id, status, priority,      title, content) values
-	  (1, '1',                   null,          null, $userA->id,           null,      0,        0, 'Ticket 1', 'Content 1'),
-	  (2, '2',      'App\Models\Item',             1, $userA->id,   $manager->id,      0,        0, 'Ticket 2', 'Content 2'),
-	  (3, '3',      'App\Models\Item',             1, $userB->id,  $supportA->id,      3,        0, 'Ticket 3', 'Content 3'),
-	  (4, '4',      'App\Models\Item',             2, $userB->id,  $supportB->id,      2,        0, 'Ticket 4', 'Content 4');
+	  (1, '1',                   null,          null, $userA->id,           null,      1,        1, 'Ticket 1', 'Content 1'),
+	  (2, '2',      'App\Models\Item',             1, $userA->id,   $manager->id,      1,        1, 'Ticket 2', 'Content 2'),
+	  (3, '3',      'App\Models\Item',             1, $userB->id,  $supportA->id,      3,        1, 'Ticket 3', 'Content 3'),
+	  (4, '4',      'App\Models\Item',             2, $userB->id,  $supportB->id,      2,        1, 'Ticket 4', 'Content 4');
 	");
 
     $this->actingAs($admin);
@@ -83,7 +83,7 @@ it('List correct tickets for interacted model', function () {
         ->fillForm([
             'title' => $title1,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -95,7 +95,7 @@ it('List correct tickets for interacted model', function () {
         ->fillForm([
             'title' => $title2,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -109,7 +109,7 @@ it('List correct tickets for interacted model', function () {
         ->fillForm([
             'title' => $title3,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();

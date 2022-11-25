@@ -30,7 +30,7 @@ class CreateTicket extends CreateRecord
 
         $data['user_id'] = auth()->id();
         $data['identifier'] = strtoupper(Str::random(8));
-        $data['status'] = 0; // first state
+        $data['status'] = 1; // first state
 
         return $data;
     }

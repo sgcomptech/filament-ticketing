@@ -30,7 +30,7 @@ class Ticket extends Model
 
     public function priorityColor()
     {
-        $colors = ['primary', 'success', 'warning', 'danger'];
+        $colors = [1 => 'success', 2 => 'primary', 3 => 'warning', 4 => 'danger'];
 
         return $colors[$this->priority] ?? 'danger';
     }

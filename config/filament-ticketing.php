@@ -17,18 +17,18 @@ return [
 
     // ticket statuses
     'statuses' => [
-        0 => 'Open',
-        1 => 'Pending',
-        2 => 'Resolved',
-        2 => 'Closed',
+        1 => 'Open',
+        2 => 'Pending',
+        3 => 'Resolved',
+        4 => 'Closed',
     ],
 
     // ticket priorities
     'priorities' => [
-        0 => 'Low',
-        1 => 'Normal',
-        2 => 'High',
-        3 => 'Critical',
+        1 => 'Low',
+        2 => 'Normal',
+        3 => 'High',
+        4 => 'Critical',
     ],
 
     // use authorization

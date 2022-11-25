@@ -23,7 +23,7 @@ beforeEach(function () {
         ->fillForm([
             'title' => $title,
             'content' => fake()->words(10, true),
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create');
     $this->ticket = Ticket::where('title', $title)->firstOrFail();

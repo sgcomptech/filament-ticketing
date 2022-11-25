@@ -20,10 +20,10 @@ it('Update tickets with authorization', function () {
 
     DB::insert("insert into tickets
 	 (id, identifier,  ticketable_type, ticketable_id, user_id, assigned_to_id, status, priority,      title,     content,   created_at, updated_at) values
-	  (1, '1',                    null,          null, $userA->id,           null,      0,        0, 'Ticket 1', 'Content 1', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
-	  (2, '2',                    null,          null, $userA->id,   $manager->id,      0,        0, 'Ticket 2', 'Content 2', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
-	  (3, '3',                    null,          null, $userB->id,  $supportA->id,      3,        0, 'Ticket 3', 'Content 3', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
-	  (4, '4',                    null,          null, $userB->id,  $supportB->id,      2,        0, 'Ticket 4', 'Content 4', '2022-10-10 00:00:00', '2022-10-10 00:00:00');
+	  (1, '1',                    null,          null, $userA->id,           null,      1,        1, 'Ticket 1', 'Content 1', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
+	  (2, '2',                    null,          null, $userA->id,   $manager->id,      1,        2, 'Ticket 2', 'Content 2', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
+	  (3, '3',                    null,          null, $userB->id,  $supportA->id,      3,        3, 'Ticket 3', 'Content 3', '2022-10-10 00:00:00', '2022-10-10 00:00:00'),
+	  (4, '4',                    null,          null, $userB->id,  $supportB->id,      2,        1, 'Ticket 4', 'Content 4', '2022-10-10 00:00:00', '2022-10-10 00:00:00');
 	");
 
     $this->actingAs($admin);
@@ -62,7 +62,7 @@ it('tickets with association', function () {
         ->fillForm([
             'title' => $title = fake()->words(5, true),
             'content' => fake()->words(10, true),
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create');
     $ticket = Ticket::where('title', $title)->firstOrFail();

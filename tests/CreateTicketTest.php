@@ -13,7 +13,7 @@ it('ticket requires title and content', function () {
         ->fillForm([
             'title' => '',
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasFormErrors();
@@ -22,7 +22,7 @@ it('ticket requires title and content', function () {
         ->fillForm([
             'title' => 'fake title',
             'content' => '',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasFormErrors();
@@ -31,7 +31,7 @@ it('ticket requires title and content', function () {
         ->fillForm([
             'title' => $title,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -56,7 +56,7 @@ it('not using User model', function () {
             'email' => '',
             'title' => 'fake title',
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasFormErrors();
@@ -71,7 +71,7 @@ it('not using User model', function () {
             'email' => 'fake@email',
             'title' => $title,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -92,7 +92,7 @@ it('not attached to any model', function () {
         ->fillForm([
             'title' => $title,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -115,7 +115,7 @@ it('attached to model', function () {
         ->fillForm([
             'title' => $title,
             'content' => 'fake content',
-            'priority' => 0,
+            'priority' => 1,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
