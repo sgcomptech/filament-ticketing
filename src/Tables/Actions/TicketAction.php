@@ -8,7 +8,7 @@ class TicketAction extends Action
 {
     protected function setUp(): void
     {
-        $this->label('Ticket');
+        $this->label(__('Ticket'));
 
         $this->icon('heroicon-o-ticket');
 

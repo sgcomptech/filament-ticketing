@@ -50,4 +50,9 @@ class CreateTicket extends CreateRecord
     {
         NewTicket::dispatch($this->record);
     }
+
+    protected function getTitle(): string
+    {
+        return __('Create Ticket');
+    }
 }

@@ -23,9 +23,14 @@ class TicketResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
+    protected static function getNavigationLabel(): string
+    {
+        return __('Ticket');
+    }
+
     protected static function getNavigationGroup(): ?string
     {
-        return config('filament-ticketing.navigation.group');
+        return __(config('filament-ticketing.navigation.group'));
     }
 
     protected static function getNavigationSort(): ?int
@@ -46,30 +51,48 @@ class TicketResource extends Resource
             $cannotAssignTickets = false;
         }
 
+        $statuses = array_map(fn ($e) => __($e), config('filament-ticketing.statuses'));
+        $priorities = array_map(fn ($e) => __($e), config('filament-ticketing.priorities'));
+
         return $form
             ->schema([
                 Card::make([
                     Placeholder::make('User Name')
+                        ->label(__('User Name'))
                         ->content(fn ($record) => $record?->user->name)
                         ->hiddenOn('create'),
                     Placeholder::make('User Email')
+                        ->label(__('User Email'))
                         ->content(fn ($record) => $record?->user->email)
                         ->hiddenOn('create'),
-                    TextInput::make('title')->required()->maxLength(255)->columnSpan(2)->disabledOn('edit'),
-                    Textarea::make('content')->required()->columnSpan(2)->disabledOn('edit'),
-                    Select::make('status')->options(config('filament-ticketing.statuses'))
+                    TextInput::make('title')
+                        ->translateLabel()
+                        ->required()
+                        ->maxLength(255)
+                        ->columnSpan(2)
+                        ->disabledOn('edit'),
+                    Textarea::make('content')
+                        ->translateLabel()
+                        ->required()
+                        ->columnSpan(2)
+                        ->disabledOn('edit'),
+                    Select::make('status')
+                        ->translateLabel()
+                        ->options($statuses)
                         ->required()
                         ->disabled(fn ($record) => (
                             $cannotManageAllTickets &&
                             ($cannotManageAssignedTickets || $record?->assigned_to_id != $user->id)
                         ))
                         ->hiddenOn('create'),
-                    Select::make('priority')->options(config('filament-ticketing.priorities'))
+                    Select::make('priority')
+                        ->translateLabel()
+                        ->options($priorities)
                         ->disabledOn('edit')
                         ->required(),
                     Select::make('assigned_to_id')
-                        ->label('Assign Ticket To')
-                        ->hint('Key in 3 or more characters to begin search')
+                        ->label(__('Assign Ticket To'))
+                        ->hint(__('Key in 3 or more characters to begin search'))
                         ->searchable()
                         ->getSearchResultsUsing(function ($search) {
                             if (strlen($search) < 3) {
@@ -100,23 +123,42 @@ class TicketResource extends Resource
             $canManageAssignedTickets = true;
         }
 
+        $statuses = array_map(fn ($e) => __($e), config('filament-ticketing.statuses'));
+        $priorities = array_map(fn ($e) => __($e), config('filament-ticketing.priorities'));
+
         return $table
             ->columns([
-                TextColumn::make('identifier')->searchable(),
-                TextColumn::make('user.name')->sortable()->searchable(),
-                TextColumn::make('title')->searchable()->words(8),
+                TextColumn::make('identifier')
+                    ->translateLabel()
+                    ->searchable(),
+                TextColumn::make('user.name')
+                    ->translateLabel()
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('title')
+                    ->translateLabel()
+                    ->searchable()
+                    ->words(8),
                 TextColumn::make('status')
-                    ->formatStateUsing(fn ($record) => config('filament-ticketing.statuses')[$record->status]),
+                    ->translateLabel()
+                    ->formatStateUsing(fn ($record) => $statuses[$record->status] ?? '-'),
                 TextColumn::make('priority')
-                    ->formatStateUsing(fn ($record) => config("filament-ticketing.priorities.$record->priority"))
+                    ->translateLabel()
+                    ->formatStateUsing(fn ($record) => $priorities[$record->priority] ?? '-')
                     ->color(fn ($record) => $record->priorityColor()),
-                TextColumn::make('assigned_to.name')->visible($canManageAllTickets || $canManageAssignedTickets),
+                TextColumn::make('assigned_to.name')
+                    ->translateLabel()
+                    ->visible($canManageAllTickets || $canManageAssignedTickets),
             ])
             ->filters([
                 Filter::make('filters')
                     ->form([
-                        Select::make('status')->options(config('filament-ticketing.statuses')),
-                        Select::make('priority')->options(config('filament-ticketing.priorities')),
+                        Select::make('status')
+                            ->translateLabel()
+                            ->options($statuses),
+                        Select::make('priority')
+                            ->translateLabel()
+                            ->options($priorities),
                     ])
                     ->query(
                         fn (Builder $query, array $data) => $query
