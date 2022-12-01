@@ -85,6 +85,12 @@ return [
 ];
 ```
 
+You can publish the translation files with:
+
+```bash
+php artisan vendor:publish --tag="filament-ticketing-translations"
+```
+
 ## Usage
 
 ### Interact your models with tickets
@@ -230,7 +236,7 @@ composer test
 
 ## Todo
 
-- [ ] Translation
+- [x] Translation
 - [x] List tickets filters
 - [ ] Badges
 - [ ] Widget
