@@ -47,7 +47,7 @@ class ListTicket extends ListRecords
         }
     }
 
-    public function getTableHeading(): Htmlable | null
+    public function getTableHeading(): Htmlable|null
     {
         return ($this->rec && $this->recid)
             ? new HtmlString(__('Tickets') . ' [<b><em>' .
