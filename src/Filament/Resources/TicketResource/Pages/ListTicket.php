@@ -50,9 +50,9 @@ class ListTicket extends ListRecords
     public function getTableHeading(): Htmlable | null
     {
         return ($this->rec && $this->recid)
-            ? new HtmlString('Tickets for <b><em>' .
+            ? new HtmlString(__('Tickets') . ' [<b><em>' .
                 $this->recInstance->{$this->recInstance->model_name()}
-                . '</em></b>')
+                . '</em></b>]')
             : null;
     }
 
@@ -77,5 +77,10 @@ class ListTicket extends ListRecords
                 ->where('ticketable_type', $this->rec)
                 ->where('ticketable_id', $this->recid)
             : $builder;
+    }
+
+    protected function getTitle(): string
+    {
+        return __('Tickets');
     }
 }

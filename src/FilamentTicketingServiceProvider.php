@@ -26,7 +26,8 @@ class FilamentTicketingServiceProvider extends PluginServiceProvider
             ->name(static::$name)
             ->hasMigrations(['create_tickets_table', 'create_comments_table'])
             ->hasViews(static::$name)
-            ->hasConfigFile(static::$name);
+            ->hasConfigFile(static::$name)
+            ->hasTranslations();
     }
 
     protected function getResources(): array

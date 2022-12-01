@@ -40,19 +40,25 @@ class CommentsRelationManager extends RelationManager
                 Stack::make([
                     Split::make([
                         TextColumn::make('user.name')
+                            ->translateLabel()
                             ->weight('bold')
                             ->color(fn (LivewireComponent $livewire, Model $record) => $livewire->ownerRecord->user_id == $record->user_id ? 'primary' : 'success')
                             ->grow(false),
-                        TextColumn::make('created_at')->dateTime()->color('secondary'),
+                        TextColumn::make('created_at')
+                            ->translateLabel()
+                            ->dateTime()
+                            ->color('secondary'),
                     ]),
                     TextColumn::make('content')->wrap(),
                 ]),
             ])
             ->headerActions([
                 Action::make('addComment')
-                    ->label('Add Comment')
+                    ->label(__('Add Comment'))
                     ->form([
-                        Textarea::make('content')->required(),
+                        Textarea::make('content')
+                            ->translateLabel()
+                            ->required(),
                     ])
                     ->action(function (array $data, LivewireComponent $livewire) use ($user): void {
                         $ticket = $livewire->ownerRecord;
@@ -76,5 +82,10 @@ class CommentsRelationManager extends RelationManager
                     }),
             ])
             ->defaultSort('id', 'desc');
+    }
+
+    public static function getTitle(): string
+    {
+        return __('Comments');
     }
 }
