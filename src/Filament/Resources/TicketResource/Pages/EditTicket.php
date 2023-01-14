@@ -24,7 +24,7 @@ class EditTicket extends EditRecord
     {
         $interacted = $this->record?->ticketable;
 
-        return __('Ticket') . ' [' . $interacted?->{$interacted?->model_name()} . ']';
+        return __('Ticket') . ($interacted ? ' [' . $interacted?->{$interacted?->model_name()} . ']' : '');
     }
 
     protected function afterFill()
