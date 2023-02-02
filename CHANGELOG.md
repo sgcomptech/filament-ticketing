@@ -2,6 +2,20 @@
 
 All notable changes to `filament-ticketing` will be documented in this file.
 
+## v1.2.1 - 2023-02-02
+
+### What's Changed
+
+- Remove square brackets by @martin-ro in https://github.com/sgcomptech/filament-ticketing/pull/6
+- [ar]: Add Arabic translations by @mohamedsabil83 in https://github.com/sgcomptech/filament-ticketing/pull/8
+
+### New Contributors
+
+- @martin-ro made their first contribution in https://github.com/sgcomptech/filament-ticketing/pull/6
+- @mohamedsabil83 made their first contribution in https://github.com/sgcomptech/filament-ticketing/pull/8
+
+**Full Changelog**: https://github.com/sgcomptech/filament-ticketing/compare/1.2.0...1.2.1
+
 ## v1.2.0 - 2022-12-01
 
 Incorporated translations
