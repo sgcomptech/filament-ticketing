@@ -16,11 +16,11 @@ A Laravel Filament Admin Panel plugin package to add support for issue tracking 
 
 ## Requirements
 
-| Software | Versions |
-| -------- | -------- |
-| PHP | 8.0, 8.1 |
-| Laravel | 8.x, 9.x |
-| Filament | 2.x |
+| Software | Versions       |
+| -------- |----------------|
+| PHP | 8.0, 8.1       |
+| Laravel | 8.x, 9.x, 10.x |
+| Filament | 2.x            |
 
 ## Installation
 
