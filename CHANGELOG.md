@@ -2,6 +2,10 @@
 
 All notable changes to `filament-ticketing` will be documented in this file.
 
+## v1.3.0 - 2023-02-26
+
+Sync with Laravel 10
+
 ## v1.2.1 - 2023-02-02
 
 ### What's Changed
