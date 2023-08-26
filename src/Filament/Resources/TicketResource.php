@@ -132,7 +132,7 @@ class TicketResource extends Resource
                     ->translateLabel()
                     ->searchable(),
                 TextColumn::make('ticketable.name')
-                    ->translateLabel()
+                    ->translateLabel(),
                 TextColumn::make('user.name')
                     ->translateLabel()
                     ->sortable()
