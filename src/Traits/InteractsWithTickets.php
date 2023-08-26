@@ -25,4 +25,9 @@ trait InteractsWithTickets
     {
         return $this->morphOne(Ticket::class, 'ticketable')->latestOfMany();
     }
+
+    public function getNameAttribute()
+    {
+        return $this->{$this->model_name()};
+    }
 }
