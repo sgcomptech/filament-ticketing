@@ -131,6 +131,8 @@ class TicketResource extends Resource
                 TextColumn::make('identifier')
                     ->translateLabel()
                     ->searchable(),
+                TextColumn::make('ticketable.name')
+                    ->translateLabel()
                 TextColumn::make('user.name')
                     ->translateLabel()
                     ->sortable()
